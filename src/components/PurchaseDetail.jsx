@@ -456,14 +456,14 @@ export default class PurchaseDetail extends Component {
 						let entregas  = lotesdata.shipment_purchase_orders
 						 for(let entrega in entregas){
 							let ide=entregas[entrega].shipment_id
-							console.log(ide)
+							//console.log(ide)
 						let movements = await Axios.get(FUNCIONES.entrega+'?id='+ide)
 							movements = movements.data.movements
 						for(let linea in movements){
 							if(movements[linea].lot_id!=null){
 
 								let loteinfo = await this.get_lote(movements[linea].lot_id)
-								let lote = {name:loteinfo.name, id:movements[linea].lot_id,cantidad:movements[linea].delivered_quantity, vence:loteinfo.expires}
+								let lote = {name:loteinfo.name, item_id:loteinfo.item_id, id:movements[linea].lot_id,cantidad:movements[linea].delivered_quantity, vence:loteinfo.expires}
 								this.guardar_lote(lote)
 							}
 						}

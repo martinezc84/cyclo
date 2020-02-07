@@ -29,7 +29,7 @@ export default class Formula extends Component {
 		show:false,
 		visiblee:false,
 		errormsj:"Error",
-		date:new Date().toLocaleDateString('en-GB'),
+		date:new Date().toLocaleDateString('en-US',{year: 'numeric', month: '2-digit', day: '2-digit'}),
 		empleado:0
 				
 	};
@@ -327,7 +327,7 @@ export default class Formula extends Component {
 		// Ciclo de llamadas
 		
 			try {
-							
+			
 				let guardar =true;
 				let booking ={
 					
@@ -338,6 +338,7 @@ export default class Formula extends Component {
 					agency_from_id:this.state.from_agency,
 					agency_to_id:this.state.to_agency,
 					reference:this.state.nombre,
+				
 					memo:"",
 					payee_id:393185,
 					
@@ -352,7 +353,7 @@ export default class Formula extends Component {
 					for (let linea in insumos){
 						if(x>0) stringdet+=","
 						if(insumos[linea].lote!=""){
-							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote+"&item+id="+insumos[linea].item_id)
+							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote+"&item_id="+insumos[linea].item_id)
 							lot_id = lot_id.data.id
 							Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+insumos[linea].booked_quantity+'","agencia_id":"'+this.state.to_agency+'"}')
 					   }else{
@@ -541,7 +542,7 @@ export default class Formula extends Component {
 							iconPosition="left"
 							onChange={this.handleDateChange}
 							localization='us'
-							dateFormat="Y-m-d"
+							dateFormat="DD/MM/YYYY"
 							icon={false}
 							initialDat={this.state.date}
 							/>

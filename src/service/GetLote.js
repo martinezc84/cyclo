@@ -15,7 +15,8 @@ exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
 		let id = event.queryStringParameters.id;
-		let { data } = await axios.get(URL+"?id="+id, { headers });
+		let item_id = event.queryStringParameters.item_id;
+		let { data } = await axios.get(URL+"?id="+id+"&item_id="+item_id, { headers });
 		console.log(data)
 		return {
 			statusCode: 200,
