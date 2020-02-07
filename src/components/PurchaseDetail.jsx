@@ -141,15 +141,16 @@ export default class PurchaseDetail extends Component {
 				.then(({ data }) => {
 					//console.log(data)
 					let date = new Date();
-					let fechastr = date.toLocaleString();
+					var options = {  year: 'numeric', month: '2-digit', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit' };
+					let fechastr = date.toLocaleString('en-US',options);
 					console.log(fechastr)
-					let hotastr = fechastr.substring(11,17)
+					let hotastr = fechastr.substring(12,16)
 					console.log(hotastr)
 					fechastr = fechastr.substring(0,10)
 					fechastr = fechastr.trim();
 					let fecha = fechastr.split('/');
 					let hora = hotastr.split(":")
-					fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
+					fechastr = fecha[0]+fecha[1]+fecha[2]+hora[0]+hora[1]
 					let detalleinf = data.purchase_order_details
 					let orden_id = data.id
 					let orden = data
