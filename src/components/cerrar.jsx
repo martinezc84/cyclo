@@ -57,6 +57,17 @@ export default class Iniciar extends Component {
 
 	};
 
+	obtener_referencia=(id, items) =>{
+		let referencia = ''
+
+		items.map((item, i)=> (
+		
+			item.orden_line_id == id ?  referencia = item.lote : false		
+
+		));	
+		
+		return referencia;
+	}
 	
 
 	async componentDidMount() {
@@ -151,10 +162,16 @@ export default class Iniciar extends Component {
 							let hora = hotastr.split(":")
 							fechastr = fecha[2]+fecha[1]+fecha[0]+hora[0]+hora[1]
 							detalle[linea].generar=false
+							let referencia = this.obtener_referencia(detalle[linea].id, consumidos);
+
+							if(referencia == ''){
+								referencia = fechastr+cont
+							}
 							//console.log("genera unico")						
 							for(let lineapt in formula.pt){
 
-								lote = {id:ids, lote:fechastr+cont, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:( formula.pt[lineapt].cantidad * detalle[linea].cantidad)}
+								//lote = {id:ids, lote:referencia, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:( formula.pt[lineapt].cantidad * detalle[linea].cantidad)}
+								lote = {id:ids, lote:referencia, producto:formula.pt[lineapt].name, item_id:formula.pt[lineapt].item_id, cantidad:0}
 								lotes.push(lote)
 								ids++
 								cont++
@@ -653,6 +670,28 @@ export default class Iniciar extends Component {
             
 		  }
 		  
+		  handleInputChangeLote = event => {
+            const target = event.target
+            const value = target.value
+			const name = target.name
+			let id = target.id
+			
+				let lotes = this.state.lotes
+				id = id.split("_")
+				
+				lotes.map((ref, i)=> (
+		
+					ref.id == id[1]  ? ref.lote = value :  false	
+		
+				));	
+				//console.log(referencias)
+				this.setState({
+					lotes
+				  })
+
+            
+          } 
+		 
 		  handleInputChangeCant = event => {
             const target = event.target
             const value = target.value
@@ -779,7 +818,15 @@ export default class Iniciar extends Component {
 						<Table.Row>
 										
 					<Table.Cell>{t.producto}</Table.Cell>
-					<Table.Cell>{t.lote}</Table.Cell>
+					<Table.Cell>{<input
+					autoFocus
+                    type="text"
+					name="lote"
+					id={"lote_"+t.id}
+                    value={t.lote}
+					onChange={this.handleInputChangeLote}				
+                    className="inputform"
+				  />}</Table.Cell>
 					 
 					<Table.Cell>
 				 

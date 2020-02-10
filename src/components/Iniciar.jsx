@@ -265,7 +265,7 @@ export default class Iniciar extends Component {
 							for(let insumo in formula.insumos){
 								if(x>0) stringdet+=","
 								stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
-								let item = {item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
+								let item = { item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
 								utilizados.push(item)
 								z++
 								x++
@@ -280,13 +280,13 @@ export default class Iniciar extends Component {
 						let lot_id
 
 						if(recursos[linea].lote!=""){
-							 lot_id = await Axios.get(FUNCIONES.lote+'?id='+recursos[linea].lote)
+							 lot_id = await Axios.get(FUNCIONES.lote+'?id='+recursos[linea].lote+'&item_id='+recursos[linea].item_id)
 							 lot_id = lot_id.data.id
 						}else{
 							lot_id = ""
 						}
 								stringdet+='"'+x+'":{"item_id":"'+recursos[linea].item_id+'", "booked_quantity":"'+recursos[linea].cantidad+'", "lot_id":"'+lot_id+'"}'
-								let item = {id:z,item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
+								let item = {id:z,lote_id:lot_id, lote:recursos[linea].lote, orden_line_id:recursos[linea].lineid,   item_id:recursos[linea].item_id,cantidad:(recursos[linea].cantidad),orden_id:this.state.orden.id, nombre:recursos[linea].producto}
 								utilizados.push(item)
 								x++
 								z++
@@ -294,7 +294,7 @@ export default class Iniciar extends Component {
 					let y=0;
 					for (let linea in series){
 						itemserie= await this.get_item(series[linea].serie)
-						let item = {id:z,item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, nombre:itemserie.name}
+						let item = {id:z,item_id:itemserie.id,cantidad:1,orden_id:this.state.orden.id, orden_line_id:recursos[linea].lineid,nombre:itemserie.name}
 						utilizados.push(item)
 						z++
 						if(itemserie!==undefined){
