@@ -424,23 +424,35 @@ export default class Iniciar extends Component {
 							generados.push(itemgen)
 							z++
 					}
-
+					let lot_id;
 					for(let lote in lotes){
 						generardetalle = true
+						let lotedata
+						if(lotes[lote].cantidad>0){
+							if(lotes[lote].lote!=""){
+								lot_id = await Axios.get(FUNCIONES.lote+'?id='+lotes[lote].lote+'&item_id='+lotes[lote].item_id)
+								
+								if(lot_id.data.id!==undefined){
+									lotedata=lot_id.data.id;	
+								}else{
+									//console.log(iteminfo)
+									let newlote = {item_id:lotes[lote].item_id, lote:lotes[lote].lote, cantidad:lotes[lote].cantidad}
+									//console.log(JSON.stringify(newitem)) 
+									
+									lotedata  = await this.crear_lote(newlote)
+									//let itemdata={id:1587455}
+									//console.log(lotedata)
+								}
+							}
 						
-						//console.log(iteminfo)
-						let newlote = {item_id:lotes[lote].item_id, lote:lotes[lote].lote, cantidad:lotes[lote].cantidad}
-						//console.log(JSON.stringify(newitem)) 
 						
-						let lotedata  = await this.crear_lote(newlote)
-						//let itemdata={id:1587455}
-						//console.log(lotedata)
-						if(x>0) stringdet+=","
-						stringdet+='"'+x+'":{"item_id":"'+lotes[lote].item_id+'", "booked_quantity":"'+lotes[lote].cantidad+'","lot_id":"'+lotedata+'"}'
-						x++
-						generadototal=generadototal+parseInt(lotes[lote].cantidad)
+							if(x>0) stringdet+=","
+								stringdet+='"'+x+'":{"item_id":"'+lotes[lote].item_id+'", "booked_quantity":"'+lotes[lote].cantidad+'","lot_id":"'+lotedata+'"}'
+								x++
+								generadototal=generadototal+parseInt(lotes[lote].cantidad)
 
-					}
+							}
+						}
 
 
 					let formula_id
