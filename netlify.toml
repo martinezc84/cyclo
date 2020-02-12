@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	#GATSBY_URL= 'http://localhost:9000'
+	GATSBY_URL= 'http://localhost:9000'
 	GATSBY_PRODUCTION='3083'
 	GATSBY_DESCARTE='3087'
 	# Locations de las netlify functions (Backend) 
@@ -47,14 +47,18 @@
 	GATSBY_URL_DELIVER='/.netlify/functions/Deliver'
 	GATSBY_URL_ITEMZAURU='/.netlify/functions/GetItemzauru'
 	GATSBY_URL_ITEMORDEN='/.netlify/functions/GetItemorden'
+	GATSBY_URL_CREARLOTE='/.netlify/functions/CrearLote'
+	GATSBY_URL_GUARDARLOTE='/.netlify/functions/GuardarLote'
+	GATSBY_URL_EDITARLOTE='/.netlify/functions/EditarLote'
+	GATSBY_URL_LOTE='/.netlify/functions/GetLote'
 	GATSBY_URL_EXISTENCIAS='/.netlify/functions/GetExistencias'
 	GATSBY_URL_LOTEZAURU='/.netlify/functions/GetLoteZauru'
 	GATSBY_URL_ENTREGA='/.netlify/functions/GetEntrega'
 	GATSBY_URL_LOTEAGENCIA='/.netlify/functions/GetLoteAgencia'
 	GATSBY_URL_LOTESAGENCIA='/.netlify/functions/GetLotesAgencia'
 	GATSBY_URL_GUARDARLOTEAGENCIA='/.netlify/functions/GuardarLoteAgencia'
-	GATSBY_URL_BENEFICIARIOS='/.netlify/functions/Beneficiarios'
-	GATSBY_URL_GUARDARLOTE='/.netlify/functions/GuardarLote'
+	
+
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://app.zauru.com'
@@ -88,7 +92,7 @@
 	GATSBY_APIP_LOTEAGENCIA= '/loteagencia'
 	GATSBY_APIP_LOTESAGENCIA= '/lotesagencia'
 	GATSBY_APIP_GUARDARLOTEAGENCIA= '/guardarloteag'
-
+	
 	#API DE ZAURU
 
 	GATSBY_API_EMPLEADOS='/settings/employees/'	
@@ -102,12 +106,12 @@
 	GATSBY_API_COMPRAS='/purchases/purchase_orders/datatables.json'
 	GATSBY_API_COMPRA='/purchases/purchase_orders/'
 	GATSBY_API_ITEM='/settings/items.json'
-  	GATSBY_API_DELIVER='/inventories/bookings/'
+	GATSBY_API_DELIVER='/inventories/bookings/'
 	GATSBY_API_ITEMZAURU='/settings/items/'
 	GATSBY_API_CREARLOTE = '/inventories/lots.json'
 	GATSBY_API_LOTEZAURU = '/inventories/lots/'
 	GATSBY_API_ENTREGA = '/inventories/deliveries/'
-	GATSBY_API_BENEFICIARIOS='/settings/payees/datatables.json?scope=clients'
+   
 
 	# Email y token de autenticación para utilizar las APIs 
         GATSBY_EMAIL='api@semperlibery.com'
