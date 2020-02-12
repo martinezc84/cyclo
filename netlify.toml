@@ -54,6 +54,7 @@
 	GATSBY_URL_LOTESAGENCIA='/.netlify/functions/GetLotesAgencia'
 	GATSBY_URL_GUARDARLOTEAGENCIA='/.netlify/functions/GuardarLoteAgencia'
 	GATSBY_URL_BENEFICIARIOS='/.netlify/functions/Beneficiarios'
+	GATSBY_URL_GUARDARLOTE='/.netlify/functions/GuardarLote'
 
 	# Dominio del sitio de las APIs (Backend)
 	GATSBY_ZAURU_URL='https://app.zauru.com'

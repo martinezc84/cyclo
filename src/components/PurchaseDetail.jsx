@@ -452,7 +452,7 @@ export default class PurchaseDetail extends Component {
 					if (capturarlotes)
 					{
 						let lotesdata =res.data
-						console.log(lotesdata)
+						//console.log(lotesdata)
 						let entregas  = lotesdata.shipment_purchase_orders
 						 for(let entrega in entregas){
 							let ide=entregas[entrega].shipment_id
