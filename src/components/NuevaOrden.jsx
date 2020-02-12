@@ -33,7 +33,7 @@ export default class NuevaOrden extends Component {
 		from_agency: 0,
 		to_agency:0,
 		nombre: "",		
-		equipo_id:"",
+		equipo_id:1,
 		buttonactive:false,
 		items:[],
 		detalle:[],
