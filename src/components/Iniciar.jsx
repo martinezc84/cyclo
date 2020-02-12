@@ -93,7 +93,7 @@ export default class Iniciar extends Component {
 						detalle[linea].generar=false						
 							//console.log("recurso variable")						
 							for(let insumo in formula.insumos){
-								recurso = {id:ids, lote:"", item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
+								recurso = {id:ids, lote:"", lineid:detalle[linea].id, item_id:formula.insumos[insumo].item_id,  producto:formula.insumos[insumo].name, cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad)}
 								recursos.push(recurso)
 								ids++
 							}
@@ -265,7 +265,7 @@ export default class Iniciar extends Component {
 							for(let insumo in formula.insumos){
 								if(x>0) stringdet+=","
 								stringdet+='"'+x+'":{"item_id":"'+formula.insumos[insumo].item_id+'", "booked_quantity":"'+(detalle[linea].cantidad*formula.insumos[insumo].cantidad)+'"}'
-								let item = { item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
+								let item = { orden_line_id:formula.insumos[insumo], item_id:formula.insumos[insumo].item_id,cantidad:(detalle[linea].cantidad*formula.insumos[insumo].cantidad),orden_id:this.state.orden.id, nombre:formula.insumos[insumo].name}
 								utilizados.push(item)
 								z++
 								x++
