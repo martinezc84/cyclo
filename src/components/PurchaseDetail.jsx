@@ -352,7 +352,7 @@ export default class PurchaseDetail extends Component {
 
 	guardar_lote=async (data)=>{
 	
-		let string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.name.replace('"', '\\"')+'","id":"'+data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+data.vence+'"}'
+		let string = '{"cantidad":"'+data.cantidad+'", "saldo":"'+data.cantidad+'"  ,"lote":"'+data.name.replace('"', '\\"')+'","id":"'+data.id+'","store_id":"'+this.state.userdata.store+'", "vence":"'+data.vence+'", "item_id":"'+data.item_id+'"}'
 		//console.log(string)
 		let res = await Axios.post(FUNCIONES.guardarlote, string) 
 		return res.data
