@@ -352,7 +352,7 @@ export default class Formula extends Component {
 					let insumos = this.state.insumos
 					for (let linea in insumos){
 						if(x>0) stringdet+=","
-						if(insumos[linea].lote!=""){
+						if(insumos[linea].lote!=""){ 
 							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote+"&item_id="+insumos[linea].item_id)
 							lot_id = lot_id.data.id
 							Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+insumos[linea].booked_quantity+'","agencia_id":"'+this.state.to_agency+'"}')
