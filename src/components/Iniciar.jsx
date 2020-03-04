@@ -42,7 +42,52 @@ export default class Iniciar extends Component {
 	}
 
 
+	pesar=async (id)=>{
 
+		let pesoanterior=""
+		let listo = false
+		let x=0
+		let y=0
+		while(!listo){
+
+			Axios.get(FUNCIONES.getpesp)
+			.then(res => {
+			  let persons = res.data;
+			  //console.log(persons)
+
+			  if(persons==pesoanterior){
+				y++
+				//console.log("iguales")
+				if(y==30)
+					console.log("capturado: "+pesoanterior)
+					listo=true
+					let series = this.state.series
+				series.map((serie, i)=> (
+				
+					serie.id == id ? serie.serie = pesoanterior : false		
+		
+				));	
+					this.setState({
+						series: series,
+					  })
+					return pesoanterior
+					
+
+			  }else{
+				  pesoanterior = persons
+				  y=0
+			  }
+			})
+			  x++
+			  if (x==50)
+				  listo=true
+			
+		}
+
+	return 0;
+
+
+	}
 	
     
     guardar = (dte) => {
@@ -471,6 +516,19 @@ export default class Iniciar extends Component {
 		
 			return(
 				<div >
+					<Button
+								
+								primary
+								onClick={() => {
+									this.pesar(	);
+								}}								
+								icon
+								labelPosition="right"
+								
+							>
+				
+								Pesar
+						</Button>
                 <form onSubmit={this.handleSubmit}>
 
 				{  (recursos.length>0)?(<React.Fragment><p >RECURSOS</p>
@@ -554,7 +612,7 @@ export default class Iniciar extends Component {
 					.map((t) => (
 						<Table.Row>
 										
-					<Table.Cell>{t.producto}</Table.Cell>
+					<Table.Cell>{t.producto} </Table.Cell>
 					<Table.Cell>{<input
 					autoFocus
                     type="text"
@@ -562,7 +620,11 @@ export default class Iniciar extends Component {
 					id={t.id}
                     value={t.serie}
 					onChange={this.handleInputChange}				
-                    className="inputform"
+					className="inputform"
+					
+					onDoubleClick={() => {
+						this.pesar(t.id);
+					}}
                   />}</Table.Cell>
 											
 					
@@ -572,6 +634,7 @@ export default class Iniciar extends Component {
 			</Table.Body>
 			</Table></React.Fragment>):('')}
 			<button type="submit" className="submitform">Iniciar</button>
+			
 			</form>	
 			<MostrarMensaje titulo={'Sus Datos fueron guardados con exito'} mensajes={'Guardar'}  visible={this.state.visible} onConfirm={this.onConfirm} />
 			<Msjerror titulo={this.state.errormsj} mensajes={'Error'}  visible={this.state.visiblee} onConfirm={this.onConfirme} />

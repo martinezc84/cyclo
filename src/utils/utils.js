@@ -81,6 +81,8 @@ const FUNCIONES = {
 	lotesagencia:URL_PREFIX+process.env.GATSBY_URL_LOTESAGENCIA,
 	guardarloteag:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTEAGENCIA,
 	beneficiarios:URL_PREFIX+process.env.GATSBY_API_BENEFICIARIOS,
+	getpesp:URL_PREFIX+"/.netlify/functions/GetPeso",
+	
 };
 
 const ZAURU = {
@@ -136,6 +138,7 @@ const APIP_URL = {
 	loteagencia:URL_APIP+process.env.GATSBY_APIP_LOTEAGENCIA,
 	lotesagencia:URL_APIP+process.env.GATSBY_APIP_LOTESAGENCIA,
 	guardarloteag:URL_APIP+process.env.GATSBY_APIP_GUARDARLOTEAGENCIA,
+	
 
 }
 
