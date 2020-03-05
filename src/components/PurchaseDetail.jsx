@@ -49,7 +49,7 @@ export default class PurchaseDetail extends Component {
 
 		const headers = {
 			
-			'Referrer-Policy': 'no-referrer-when-downgrade',
+			'Referrer-Policy': 'no-referrer',
 			
 		};
 
