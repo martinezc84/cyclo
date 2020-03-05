@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	GATSBY_URL= 'http://localhost:9000'
+	GATSBY_URL= 'https://peaceful-bose-dc9cbb.netlify.com'
 	GATSBY_PRODUCTION='3083'
 	GATSBY_DESCARTE='3087'
 	# Locations de las netlify functions (Backend) 
