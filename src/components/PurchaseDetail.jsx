@@ -61,7 +61,7 @@ export default class PurchaseDetail extends Component {
 
 			
 
-			Axios.get("https://"+this.state.ip+":88",{ headers })
+			Axios.get("http://"+this.state.ip+":88",{ headers })
 			.then(res => {
 			  let persons = res.data;
 			  //console.log(persons)
