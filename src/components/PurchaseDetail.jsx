@@ -48,7 +48,8 @@ export default class PurchaseDetail extends Component {
 	pesar=async (id)=>{
 
 		const headers = {
-			'referer': 'http://peaceful-bose-dc9cbb.netlify.com/',
+			
+			'Referrer-Policy': 'no-referrer-when-downgrade',
 			
 		};
 
