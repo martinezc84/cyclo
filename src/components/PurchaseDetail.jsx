@@ -49,7 +49,7 @@ export default class PurchaseDetail extends Component {
 
 		const headers = {
 			
-			'Referrer-Policy': 'origin',
+			'Referrer-Policy': 'unsafe-url',
 			
 		};
 
