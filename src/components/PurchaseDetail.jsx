@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
-import { FUNCIONES } from '../utils/utils';
+import { FUNCIONES, headers } from '../utils/utils';
 import { Loader, Table, Grid, Button } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -47,11 +47,7 @@ export default class PurchaseDetail extends Component {
 	 
 	pesar=async (id)=>{
 
-		const headers = {
-			
-			'Referrer-Policy': 'unsafe-url',
-			
-		};
+		
 
 		let pesoanterior=""
 		let listo = false
@@ -61,7 +57,7 @@ export default class PurchaseDetail extends Component {
 
 			
 
-			Axios.get("http://"+this.state.ip+":88",{ headers })
+			await Axios.get("https://dcgse.com/calendario_api/apiprod/GetPeso",{ headers })
 			.then(res => {
 			  let persons = res.data;
 			  //console.log(persons)
@@ -69,7 +65,7 @@ export default class PurchaseDetail extends Component {
 			  if(persons==pesoanterior){
 				y++
 				//console.log("iguales")
-				if(y==30)
+				if(y==5)
 					console.log("capturado: "+pesoanterior)
 					listo=true
 					let detalle = this.state.detalle
@@ -92,7 +88,7 @@ export default class PurchaseDetail extends Component {
 			  }
 			})
 			  x++
-			  if (x==50)
+			  if (x==10)
 				  listo=true
 			
 		}
