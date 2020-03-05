@@ -51,7 +51,7 @@ export default class PurchaseDetail extends Component {
 		let y=0
 		while(!listo){
 
-			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
+			Axios.get("http://"+this.state.ip+":88")
 			.then(res => {
 			  let persons = res.data;
 			  //console.log(persons)
