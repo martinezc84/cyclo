@@ -109,7 +109,7 @@ export default class UnpaidInvoices extends Component {
 
 
 
-	componentDidMount() {
+	 componentDidMount() {
 		
 		
 
@@ -127,6 +127,8 @@ export default class UnpaidInvoices extends Component {
 				this.setState({
 					loading: true
 				});
+
+				
                 
 				Axios.post(`${FUNCIONES.PurchaseOrders}`,'{"valor":"'+buscar+'"}')
 					.then(({ data }) => {

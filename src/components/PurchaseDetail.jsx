@@ -7,6 +7,7 @@ import { Loader, Table, Grid, Button } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import FilaDetalle from './FilaDetalleCompra';
+import PesaDetalle from './PesaDetalle';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
 import { navigate } from 'gatsby';
 import { domainToASCII } from 'url';
@@ -35,12 +36,61 @@ export default class PurchaseDetail extends Component {
 		visilee:false,
 		defaultdate: new Date(),
 		descripcion:"",
-		orden:null
+		orden:null,
+		ip:"192.168.100.1",
+		pesocapturado:"0",
 
 				
 	};
 	 
+	pesar=async (id)=>{
+
+		let pesoanterior=""
+		let listo = false
+		let x=0
+		let y=0
+		while(!listo){
+
+			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
+			.then(res => {
+			  let persons = res.data;
+			  //console.log(persons)
+
+			  if(persons==pesoanterior){
+				y++
+				//console.log("iguales")
+				if(y==30)
+					console.log("capturado: "+pesoanterior)
+					listo=true
+					let detalle = this.state.detalle
+					detalle.map((linea, i)=> (
+					
+						linea.id == id ? linea.cantidad = parseFloat(pesoanterior) : false		
+
+					));		
 	
+						this.setState(
+							{
+								detalle:detalle
+							})
+					return pesoanterior
+					
+
+			  }else{
+				  pesoanterior = persons
+				  y=0
+			  }
+			})
+			  x++
+			  if (x==50)
+				  listo=true
+			
+		}
+
+	return 0;
+
+
+	}
     
 
 	setStateAsync(state) {
@@ -128,6 +178,16 @@ export default class PurchaseDetail extends Component {
 				getmem, guardarmem, comprables, action, agencias
 				
 			});
+
+			await Axios.get(FUNCIONES.getip)
+				.then(({ data }) => {
+					let ip = data.ip
+
+					console.log(ip)
+					this.setState({
+						ip
+					});
+				})
 				
 				
 				let id = parseInt(this.props.id)
@@ -163,7 +223,8 @@ export default class PurchaseDetail extends Component {
 							reference:detalleinf[linea].reference, 
 							item_id:detalleinf[linea].item_id, 
 							item_cantidad:detalleinf[linea].booked_quantity,
-							cantidad:detalleinf[linea].booked_quantity, 
+							//cantidad:detalleinf[linea].booked_quantity, 
+							cantidad:0,
 							unico:false, 
 							series:[],
 							lote:fechastr+cont,
@@ -575,6 +636,8 @@ export default class PurchaseDetail extends Component {
 			
 			return(
 				<div >
+
+					<PesaDetalle peso={this.state.pesocapturado} view={this.state.verpesa}></PesaDetalle>
 					<form onSubmit={this.handleSubmit}>
 					<Grid.Row><Grid.Column> <label>Orden {orden.id_number}
 						</label></Grid.Column>
@@ -615,6 +678,7 @@ export default class PurchaseDetail extends Component {
 								esunico={this.esunicol}
 								guardarserie={this.guardarserie}
 								guardarlote={this.guardarlote}
+								pesar={this.pesar}
 								
 							/>
 						))}

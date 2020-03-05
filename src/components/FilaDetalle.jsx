@@ -32,7 +32,7 @@ export default class FilaDetalle extends Component {
 	
 
 	render() {
-		let {  items, line, view, item_id, selectitem, id, formulas, cantidad, from_orden } = this.props;
+		let {  items, line, pesar, item_id, selectitem, id, formulas, cantidad, from_orden } = this.props;
 		
 		
 	//console.log(item_id)
@@ -71,8 +71,11 @@ export default class FilaDetalle extends Component {
 					type="text"
 					name="cantidad"
 					value={cantidad}
-					onChange={this.handleInputChange}
+					//onChange={this.handleInputChange}
 					className="inputform"
+					onDoubleClick={() => {
+						pesar(id);
+					}}
 		  			/>
 			
 			</Table.Cell>

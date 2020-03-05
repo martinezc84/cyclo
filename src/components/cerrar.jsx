@@ -31,7 +31,9 @@ export default class Iniciar extends Component {
 		itemst:[],
 		loading:false,
 		date:new Date().toLocaleDateString('en-GB'),
-		consumototal:0
+		consumototal:0,
+		ip:"192.168.100.1",
+		pesocapturado:"0",
 				
 	};
 	
@@ -45,7 +47,102 @@ export default class Iniciar extends Component {
 	}
 
 
+	pesar=async (id, campo)=>{
 
+		let pesoanterior=""
+		let listo = false
+		let x=0
+		let y=0
+		while(!listo){
+
+			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
+			.then(res => {
+			  let persons = res.data;
+			  //console.log(persons)
+
+			  if(persons==pesoanterior){
+				y++
+				//console.log("iguales")
+				if(y==30)
+					console.log("capturado: "+pesoanterior)
+					listo=true
+
+					switch (campo) {
+						case '1':
+							let referencias = this.state.referencias
+														
+							referencias.map((ref, i)=> (
+					
+								ref.id == id  ? ref.peso = parseFloat(pesoanterior) :  false	
+					
+							));	
+							//console.log(referencias)
+							this.setState({
+								referencias
+							})
+							break;
+						case '2':
+							let lotes = this.state.lotes
+							
+							
+							lotes.map((ref, i)=> (
+					
+								ref.id == id  ? ref.cantidad = parseFloat(pesoanterior) :  false	
+					
+							));	
+							//console.log(referencias)
+							this.setState({
+								lotes
+							})
+							break;
+						case '3':
+							let desperdicios = this.state.desperdicios
+						
+							desperdicios.map((desp, i)=> (
+					
+								desp.id == id  ? desp.cantidad = parseFloat(pesoanterior) :  false	
+					
+							));	
+			
+							this.setState({
+								desperdicios
+							  })
+								break;
+						case '4':
+							let rendimientos = this.state.rendimientos
+								
+								rendimientos.map((desp, i)=> (
+						
+									desp.id == id  ? desp.cantidad = parseFloat(pesoanterior) :  false	
+						
+								));	
+
+								this.setState({
+									rendimientos
+								})
+							break;
+
+
+					}
+					
+					return pesoanterior
+					
+
+			  }else{
+				  pesoanterior = persons
+				  y=0
+			  }
+			})
+			  x++
+			  if (x==50)
+				  listo=true
+			
+		}
+
+	return 0;
+
+
+	}
 	
     
     guardar = (dte) => {
@@ -76,6 +173,16 @@ export default class Iniciar extends Component {
 			userdata: getUser(),
 			loading:true
 		});
+
+		await Axios.get(FUNCIONES.getip)
+				.then(({ data }) => {
+					let ip = data.ip
+
+					console.log(ip)
+					this.setState({
+						ip
+					});
+				})
 		let to_agency
 			let { action, comprables, vendibles  } = this.props;
 		
@@ -746,7 +853,7 @@ export default class Iniciar extends Component {
            
 			
 		} = this.state;
-		console.log(lotes)
+		//console.log(lotes)
 
 			if (loading) {
 			return <Loader active inline="centered" />;
@@ -810,12 +917,15 @@ export default class Iniciar extends Component {
 				  </Table.Cell>
 				  <Table.Cell>{<input
 					autoFocus
-                    type="number"
+                    type="text"
 					name="peso"
 					id={"peso_"+t.id}
                     value={t.peso}
-					onChange={this.handleInputChangepeso}				
-                    className="inputform"
+					//onChange={this.handleInputChangepeso}				
+					className="inputform"
+					onDoubleClick={() => {
+						this.pesar(t.id,'1');
+					}}
 				  />}
 				 
 				  </Table.Cell>
@@ -845,12 +955,15 @@ export default class Iniciar extends Component {
 				  </Table.Cell>
 				  <Table.Cell>{<input
 					autoFocus
-                    type="number"
+                    type="text"
 					name="cantidad"
 					id={"cantidad_"+t.id}
                     value={t.cantidad}
-					onChange={this.handleInputChangeCant}				
-                    className="inputform"
+					//onChange={this.handleInputChangeCant}				
+					className="inputform"
+					onDoubleClick={() => {
+						this.pesar(t.id,'2');
+					}}
 				  />}
 				 
 				  </Table.Cell>
@@ -888,12 +1001,15 @@ export default class Iniciar extends Component {
 					<Table.Cell>{t.producto}</Table.Cell>
 					<Table.Cell>{<input
 					autoFocus
-                    type="number"
+                    type="text"
 					name="desperdicio"
 					id={"desper_"+t.id}
                     value={t.serie}
-					onChange={this.handleInputChange}				
-                    className="inputform"
+					//onChange={this.handleInputChange}				
+					className="inputform"
+					onDoubleClick={() => {
+						this.pesar(t.id,'3');
+					}}
                   />}</Table.Cell>
 											
 					
@@ -929,12 +1045,15 @@ export default class Iniciar extends Component {
 					<Table.Cell>{t.producto}</Table.Cell>
 					<Table.Cell>{<input
 					autoFocus
-                    type="number"
+                    type="text"
 					name="rendimiento"
 					id={"rendi_"+t.id}
                     value={t.serie}
-					onChange={this.handleInputChange}				
-                    className="inputform"
+					//onChange={this.handleInputChange}				
+					className="inputform"
+					onDoubleClick={() => {
+						this.pesar(t.id,'4');
+					}}
                   />}</Table.Cell>
 											
 					

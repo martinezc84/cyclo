@@ -60,7 +60,7 @@ export default class FilaDetalleCompra extends Component {
 	render() {
 
 		
-		let { id, cantidad, line, esunico } = this.props;
+		let { id, cantidad,pesar, line, esunico } = this.props;
 		//console.log(key);
 	
 			return (
@@ -73,12 +73,14 @@ export default class FilaDetalleCompra extends Component {
 					<Table.Cell>
 					<input
 					autoFocus
-                    type="number"
+                    type="text"
 					name="cantidad"
 					id={id}
                     value={cantidad}
-					onChange={this.handleInputChange}
-				
+					//onChange={this.handleInputChange}
+					onDoubleClick={() => {
+						pesar(id);
+					}}
                     className="inputform"
                   />
 					</Table.Cell>
@@ -123,6 +125,7 @@ export default class FilaDetalleCompra extends Component {
 								id_parent={id}
 								peso={t.peso}
 								guardarpeso={this.guardarpeso}
+
 								
 							/>
 						)):('')

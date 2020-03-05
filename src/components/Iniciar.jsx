@@ -29,6 +29,7 @@ export default class Iniciar extends Component {
 		buttonactive:false,
 		itemst:[],
 		date:new Date().toLocaleDateString('en-GB'),
+		ip:"192.168.100.1"
 				
 	};
 	
@@ -50,7 +51,7 @@ export default class Iniciar extends Component {
 		let y=0
 		while(!listo){
 
-			Axios.get(FUNCIONES.getpesp)
+			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
 			.then(res => {
 			  let persons = res.data;
 			  //console.log(persons)
@@ -101,7 +102,7 @@ export default class Iniciar extends Component {
 
 	
 
-	componentDidMount() {
+	async componentDidMount() {
 	
 		this.setState({
 			userdata: getUser(),
@@ -113,6 +114,16 @@ export default class Iniciar extends Component {
 				let id = this.props.id
 				let formula
 				let formula_id
+				await Axios.get(FUNCIONES.getip)
+				.then(({ data }) => {
+					let ip = data.ip
+
+					console.log(ip)
+					this.setState({
+						ip
+					});
+				})
+				
 				Axios.get(FUNCIONES.orden+"?id="+id)
 				.then(({ data }) => {
 					//console.log(data)
@@ -516,19 +527,7 @@ export default class Iniciar extends Component {
 		
 			return(
 				<div >
-					<Button
-								
-								primary
-								onClick={() => {
-									this.pesar(	);
-								}}								
-								icon
-								labelPosition="right"
-								
-							>
 				
-								Pesar
-						</Button>
                 <form onSubmit={this.handleSubmit}>
 
 				{  (recursos.length>0)?(<React.Fragment><p >RECURSOS</p>

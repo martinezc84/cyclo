@@ -14,18 +14,12 @@ const headersr = {
 exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
-		if (event.httpMethod !== 'POST') {
-			return { statusCode: 405, body: 'Method Not Allowed!' };
-		}
-		//console.log(event.body);
-		let  dataip = JSON.parse(event.body)
-		//console.log(dataip.ip);
 		
-		let { data } = await axios.get('http://'+dataip.ip+':88');
+		let { data } = await axios.get('https://dcgse.com/calendario_api/apiprod/GetIP',{ headers } );
 		//console.log(data)
 		return {
 			statusCode: 200,
-			body: data,
+			body: JSON.stringify(data),
 			headers:headersr
 		};
 	} catch (error) {

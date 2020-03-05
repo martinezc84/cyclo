@@ -81,7 +81,8 @@ const FUNCIONES = {
 	lotesagencia:URL_PREFIX+process.env.GATSBY_URL_LOTESAGENCIA,
 	guardarloteag:URL_PREFIX+process.env.GATSBY_URL_GUARDARLOTEAGENCIA,
 	beneficiarios:URL_PREFIX+process.env.GATSBY_API_BENEFICIARIOS,
-	getpesp:URL_PREFIX+"/.netlify/functions/GetPeso",
+	getpeso:URL_PREFIX+"/.netlify/functions/GetPeso",
+	getip:URL_PREFIX+"/.netlify/functions/GetIP",
 	
 };
 
