@@ -42,8 +42,15 @@ export default class PurchaseDetail extends Component {
 
 				
 	};
+
+	
 	 
 	pesar=async (id)=>{
+
+		const headers = {
+			'referer': 'http://peaceful-bose-dc9cbb.netlify.com/',
+			
+		};
 
 		let pesoanterior=""
 		let listo = false
@@ -51,7 +58,9 @@ export default class PurchaseDetail extends Component {
 		let y=0
 		while(!listo){
 
-			Axios.get("http://"+this.state.ip+":88")
+			
+
+			Axios.get("http://"+this.state.ip+":88",{ headers })
 			.then(res => {
 			  let persons = res.data;
 			  //console.log(persons)
