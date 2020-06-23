@@ -125,6 +125,7 @@ export default class FilaDetalleCompra extends Component {
 								id_parent={id}
 								peso={t.peso}
 								guardarpeso={this.guardarpeso}
+								pesar={pesar}								
 
 								
 							/>

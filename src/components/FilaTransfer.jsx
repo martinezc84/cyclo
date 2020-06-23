@@ -45,7 +45,7 @@ export default class FilaTransfer extends Component {
 	
 
 	render() {
-		let {  items, item_id, selectitem, id,  cantidad, view, buscaritem, lote } = this.props;
+		let {  items, item_id, selectitem, id, pesar,  cantidad, view, buscaritem, lote } = this.props;
 		let insumo=null
 		
 			item_id = parseInt(item_id)
@@ -103,10 +103,13 @@ export default class FilaTransfer extends Component {
 			<input
 			type="text"
 			name="cantidad"
+			id={"cantidad_"+id}
 			value={cantidad}
-			onChange={this.handleInputChange}
+			//onChange={this.handleInputChange}
 			className="inputform"
-			
+			onDoubleClick={() => {
+				pesar(id);
+			}}
 		  />):('')}
 			
 			

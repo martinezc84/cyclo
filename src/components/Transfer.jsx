@@ -491,6 +491,59 @@ export default class Formula extends Component {
             this.guardar_formula()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
+
+					pesar=async (id)=>{
+
+						let pesoanterior=""
+						let listo = false
+						let x=0
+						let y=0
+						while(!listo){
+				
+							Axios.get(FUNCIONES.getpeso)
+							.then(res => {
+							  let persons = res.data.peso;
+							  //console.log(persons)
+				
+							  if(persons==pesoanterior){
+								y++
+								//console.log("iguales")
+								if(y==3)
+									console.log("capturado: "+pesoanterior)
+									listo=true
+				
+									
+											let lineas = this.state.insumos
+											//console.log(id)						
+											lineas.map((ref, i)=> (
+												//console.log(ref.id)
+												ref.id == id  ? ref.booked_quantity = parseFloat(pesoanterior) :  false	
+									
+											));	
+											//console.log(referencias)
+											this.setState({
+												lineas
+											})
+								
+									
+									return pesoanterior
+									
+				
+							  }else{
+								  pesoanterior = persons
+								  y=0
+							  }
+							})
+							  x++
+							  if (x==6)
+								  listo=true
+							
+						}
+				
+					return 0;
+				
+				
+					}
 					
 
 				
@@ -642,6 +695,7 @@ export default class Formula extends Component {
 							cantidad={t.booked_quantity}							
 							guardarcantidad={guardarcantidad}
 							guardarlote={this.guardarlote}
+							pesar={this.pesar}
 						/>
 					))}
 			</Table.Body>

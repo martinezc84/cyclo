@@ -57,15 +57,15 @@ export default class PurchaseDetail extends Component {
 
 			
 
-			await Axios.get("https://dcgse.com/calendario_api/apiprod/GetPeso",{ headers })
+			await Axios.get(FUNCIONES.getpeso)
 			.then(res => {
-			  let persons = res.data;
-			  //console.log(persons)
+			  let persons = res.data.peso;
+			  console.log(persons)
 
 			  if(persons==pesoanterior){
 				y++
-				//console.log("iguales")
-				if(y==5)
+				console.log("iguales")
+				if(y==3)
 					console.log("capturado: "+pesoanterior)
 					listo=true
 					let detalle = this.state.detalle

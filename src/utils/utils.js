@@ -83,6 +83,8 @@ const FUNCIONES = {
 	beneficiarios:URL_PREFIX+process.env.GATSBY_API_BENEFICIARIOS,
 	getpeso:URL_PREFIX+"/.netlify/functions/GetPeso",
 	getip:URL_PREFIX+"/.netlify/functions/GetIP",
+	postapi:URL_PREFIX+"/.netlify/functions/PostApi",
+	getapi:URL_PREFIX+"/.netlify/functions/GetApi",
 	
 };
 

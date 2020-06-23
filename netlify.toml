@@ -5,7 +5,8 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	GATSBY_URL= 'https://peaceful-bose-dc9cbb.netlify.com'
+	#GATSBY_URL= 'https://peaceful-bose-dc9cbb.netlify.com'
+	GATSBY_URL= 'http://localhost:9000'
 	GATSBY_PRODUCTION='3083'
 	GATSBY_DESCARTE='3087'
 	# Locations de las netlify functions (Backend) 
@@ -61,7 +62,7 @@
 
 
 	# Dominio del sitio de las APIs (Backend)
-	GATSBY_ZAURU_URL='https://app.zauru.com'
+	GATSBY_ZAURU_URL='https://zauru.herokuapp.com'
 	GATSBY_URL_API = 'https://dcgse.com/calendario_api/apical'
 	GATSBY_URL_APIP = 'https://dcgse.com/calendario_api/apiprod'
 	GATSBY_URL_IMAGES = 'https://dcgse.com/calendario_api/uploads'

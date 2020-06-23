@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo screen -dmS 'pesaapi' 'python /home/pi/todo-api/pesa.py'

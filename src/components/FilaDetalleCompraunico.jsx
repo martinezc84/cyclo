@@ -35,7 +35,7 @@ export default class FilaDetalleCompraunico extends Component {
 	render() {
 
 		
-		let { id, serie, name, id_parent, peso } = this.props;
+		let { id, serie, name, id_parent, peso, pesar } = this.props;
 		//console.log(key);
 	
 			return (
@@ -65,6 +65,9 @@ export default class FilaDetalleCompraunico extends Component {
 					onChange={this.handleInputChangepeso}				
 					className="inputform"
 					id={"eso_"+id_parent+"_"+id}
+					onDoubleClick={() => {
+						pesar("eso_"+id_parent+"_"+id);
+					}}
                   />
 					</Table.Cell>
 					
