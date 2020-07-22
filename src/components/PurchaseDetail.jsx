@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, headers } from '../utils/utils';
-import { Loader, Table, Grid, Button } from 'semantic-ui-react';
+import { Loader, Table, Grid, Button,Dropdown } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import FilaDetalle from './FilaDetalleCompra';
@@ -20,7 +20,7 @@ export default class PurchaseDetail extends Component {
 		from_agency: 0,
 		to_agency:0,
 		nombre: "",		
-		equipo_id:"",
+		equipo_id:0,
 		buttonactive:false,
 		items:[],
 		detalle:[],
@@ -53,50 +53,51 @@ export default class PurchaseDetail extends Component {
 		let listo = false
 		let x=0
 		let y=0
-		while(!listo){
+		if (this.state.equipo_id != 0){
+			while(!listo){	
 
-			
+				await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
+				.then(res => {
+				let persons = res.data.peso;
+				console.log(persons)
 
-			await Axios.get(FUNCIONES.getpeso)
-			.then(res => {
-			  let persons = res.data.peso;
-			  console.log(persons)
+				if(persons==pesoanterior){
+					y++
+					console.log("iguales")
+					if(y==2)
+						//console.log("capturado: "+pesoanterior)
+						listo=true
+						let detalle = this.state.detalle
+						detalle.map((linea, i)=> (
+						
+							linea.id == id ? linea.cantidad = parseFloat(pesoanterior) : false		
 
-			  if(persons==pesoanterior){
-				y++
-				console.log("iguales")
-				if(y==3)
-					console.log("capturado: "+pesoanterior)
+						));		
+		
+							this.setState(
+								{
+									detalle:detalle
+								})
+						return pesoanterior
+						
+
+				}else{
+					pesoanterior = persons
+					y=0
+				}
+				})
+				x++
+				if (x==10)
 					listo=true
-					let detalle = this.state.detalle
-					detalle.map((linea, i)=> (
-					
-						linea.id == id ? linea.cantidad = parseFloat(pesoanterior) : false		
-
-					));		
-	
-						this.setState(
-							{
-								detalle:detalle
-							})
-					return pesoanterior
-					
-
-			  }else{
-				  pesoanterior = persons
-				  y=0
-			  }
-			})
-			  x++
-			  if (x==10)
-				  listo=true
-			
+				
+			}
+		}else{
+			alert("Seleccione equipo!");
 		}
 
 	return 0;
 
-
-	}
+}
     
 
 	setStateAsync(state) {
@@ -184,7 +185,7 @@ export default class PurchaseDetail extends Component {
 				getmem, guardarmem, comprables, action, agencias
 				
 			});
-
+			let res = await this.equipos();
 			await Axios.get(FUNCIONES.getip)
 				.then(({ data }) => {
 					let ip = data.ip
@@ -246,7 +247,8 @@ export default class PurchaseDetail extends Component {
 							detalle:detalle,
 							orden_id:orden_id,
 							loading:false,
-							orden:orden
+							orden:orden,
+							Selectequipo:this.Selectequipo,
 					});
 				})
 				.catch((error) => {
@@ -256,6 +258,49 @@ export default class PurchaseDetail extends Component {
 					this.setStateAsync({show:true})			
 			
     
+}
+
+trataEquipo= (empleados) => {
+	return empleados.map((t) => ({
+		key: t.id,
+		value: t.id,
+		text: t.name,
+		
+	}));
+};
+
+async equipos(){
+	if(this.props.getmem('equipos')===undefined){
+		let userdata = getUser()
+			try {
+				
+				let res = await Axios.get(FUNCIONES.equipos+"?id=5");
+				let equipos = res.data
+				equipos = this.trataEquipo(equipos)
+				console.log(equipos)
+				this.props.guardarmem('equipos', equipos);
+				
+				this.setState({
+					equipos: equipos,
+					
+				});
+
+				//cargar formula
+				return true
+				
+			
+			}catch(error) {
+				console.error(error);
+				return false
+			};
+		}else{
+			//console.log(this.props.getmem('equipos'))
+			this.setState({
+				equipos:this.props.getmem('equipos')
+				
+			});
+			return true
+		}
 }
 
 
@@ -633,7 +678,7 @@ export default class PurchaseDetail extends Component {
 		
 		items = [items,...itemst]
 		let {
-		loading, equipos, action,  detalle, orden
+		loading, equipos, action, equipo_id, Selectequipo,  detalle, orden
 			
 		} = this.state;
 		if (loading || orden==null) {
@@ -645,12 +690,20 @@ export default class PurchaseDetail extends Component {
 
 					<PesaDetalle peso={this.state.pesocapturado} view={this.state.verpesa}></PesaDetalle>
 					<form onSubmit={this.handleSubmit}>
-					<Grid.Row><Grid.Column> <label>Orden {orden.id_number}
+					<Grid.Row columns={4}><Grid.Column> <label>Orden {orden.id_number}
 						</label></Grid.Column>
 						<Grid.Column> <label>Proveedor {orden.payee.name}
 						</label></Grid.Column>
 						<Grid.Column> <label>Fecha {orden.issue_date}
 						</label></Grid.Column>
+						<Grid.Column><label>Equipo<Dropdown
+						value={equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="ui segment"
+					/></label></Grid.Column>
 					</Grid.Row>						
 					<p >DETALLE</p>
 				<Table sortable celled>

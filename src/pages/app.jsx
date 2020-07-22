@@ -431,7 +431,8 @@ export default class App extends Component {
 		};
 
 		let propsIni = {
-		
+			guardarmem:this.guardarmem,
+			getmem:this.getmem,
 			
 		};
 		return (

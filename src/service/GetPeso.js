@@ -15,9 +15,9 @@ exports.handler = async (event, context) => {
 	try {
 		//@ts-ignore
 	
-	
-		let { data } = await axios.get("https://dcgse.com/calendario_api/apiprod/GetPeso", {headers});
-		//console.log(data)
+		let id = event.queryStringParameters.id;
+		let { data } = await axios.get("https://dcgse.com/calendario_api/apiprod/GetPeso?id="+id, {headers});
+		console.log(data)
 		return {
 			statusCode: 200,
 			body: JSON.stringify(data),

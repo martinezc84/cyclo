@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, production } from '../utils/utils';
-import { Header, Table, Loader, Grid, Button} from 'semantic-ui-react';
+import { Header, Table, Loader, Grid, Dropdown} from 'semantic-ui-react';
 import sortBy from 'lodash/sortBy';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
@@ -28,6 +28,7 @@ export default class Iniciar extends Component {
 		ptcont:1,
 		buttonactive:false,
 		itemst:[],
+		equipo_id:0,
 		date:new Date().toLocaleDateString('en-GB'),
 		ip:"192.168.100.1"
 				
@@ -45,50 +46,57 @@ export default class Iniciar extends Component {
 
 	pesar=async (id)=>{
 
+		
+
 		let pesoanterior=""
 		let listo = false
 		let x=0
 		let y=0
-		while(!listo){
+		if (this.state.equipo_id != 0){
+			while(!listo){	
 
-			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
-			.then(res => {
-			  let persons = res.data;
-			  //console.log(persons)
+				await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
+				.then(res => {
+				let persons = res.data.peso;
+				console.log(persons)
 
-			  if(persons==pesoanterior){
-				y++
-				//console.log("iguales")
-				if(y==30)
-					console.log("capturado: "+pesoanterior)
-					listo=true
-					let series = this.state.series
-				series.map((serie, i)=> (
-				
-					serie.id == id ? serie.serie = pesoanterior : false		
+				if(persons==pesoanterior){
+					y++
+					console.log("iguales")
+					if(y==2)
+						//console.log("capturado: "+pesoanterior)
+						listo=true
+						let detalle = this.state.detalle
+						detalle.map((linea, i)=> (
+						
+							linea.id == id ? linea.cantidad = parseFloat(pesoanterior) : false		
+
+						));		
 		
-				));	
-					this.setState({
-						series: series,
-					  })
-					return pesoanterior
-					
+							this.setState(
+								{
+									detalle:detalle
+								})
+						return pesoanterior
+						
 
-			  }else{
-				  pesoanterior = persons
-				  y=0
-			  }
-			})
-			  x++
-			  if (x==50)
-				  listo=true
-			
+				}else{
+					pesoanterior = persons
+					y=0
+				}
+				})
+				x++
+				if (x==10)
+					listo=true
+				
+			}
+		}else{
+			alert("Seleccione equipo!");
 		}
 
 	return 0;
 
-
-	}
+}
 	
     
     guardar = (dte) => {
@@ -99,6 +107,50 @@ export default class Iniciar extends Component {
 		 console.log(dte)
 
 	};
+
+	trataEquipo= (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.id,
+			text: t.name,
+			
+		}));
+	};
+	
+
+	async equipos(){
+		if(this.props.getmem('equipos')===undefined){
+			let userdata = getUser()
+				try {
+					
+					let res = await Axios.get(FUNCIONES.equipos+"?id=5");
+					let equipos = res.data
+					equipos = this.trataEquipo(equipos)
+					console.log(equipos)
+					this.props.guardarmem('equipos', equipos);
+					
+					this.setState({
+						equipos: equipos,
+						
+					});
+	
+					//cargar formula
+					return true
+					
+				
+				}catch(error) {
+					console.error(error);
+					return false
+				};
+			}else{
+				//console.log(this.props.getmem('equipos'))
+				this.setState({
+					equipos:this.props.getmem('equipos')
+					
+				});
+				return true
+			}
+	}
 
 	
 
@@ -114,6 +166,7 @@ export default class Iniciar extends Component {
 				let id = this.props.id
 				let formula
 				let formula_id
+				let res = await this.equipos();
 				await Axios.get(FUNCIONES.getip)
 				.then(({ data }) => {
 					let ip = data.ip
@@ -189,6 +242,7 @@ export default class Iniciar extends Component {
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
 				guardarcantidadflex:this.guardarcantidadflex,
+				Selectequipo:this.Selectequipo,
 				
 			});
 					
@@ -429,6 +483,15 @@ export default class Iniciar extends Component {
 		
 		
 		};
+
+		Selectequipo = (e, item) => {
+			//console.log(item)
+			this.setState(
+				{
+					equipo_id:item.value
+				})
+			
+		};
 		
 	
 
@@ -516,7 +579,7 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			series, recursos, loading
+			series, recursos, loading, equipo_id, Selectequipo, equipos
            
 			
 		} = this.state;
@@ -530,7 +593,23 @@ export default class Iniciar extends Component {
 				
                 <form onSubmit={this.handleSubmit}>
 
-				{  (recursos.length>0)?(<React.Fragment><p >RECURSOS</p>
+				{  (recursos.length>0)?(
+				
+				
+
+				
+				<React.Fragment>
+					<Grid.Row columns={1}>
+				<Grid.Column><label>Equipo<Dropdown
+						value={equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="ui segment"
+					/></label></Grid.Column>
+					</Grid.Row>
+					<p >RECURSOS</p>
 			<Table sortable celled>
 			<Table.Header>
 			<Table.Row>
@@ -589,6 +668,16 @@ export default class Iniciar extends Component {
 			</Table></React.Fragment>):('')}
 								
 			{  (series.length>0)?(<React.Fragment>
+				<Grid.Row columns={1}>
+				<Grid.Column><label>Equipo<Dropdown
+						value={equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="ui segment"
+					/></label></Grid.Column>
+					</Grid.Row>
 			<p >SERIES DE PRODUCTOS</p>
 			<Table sortable celled>
 			<Table.Header>

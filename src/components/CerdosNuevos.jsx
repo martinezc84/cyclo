@@ -23,7 +23,6 @@ export default class CerdosNuevos extends Component {
 		insumoscont:1,
 		ptcont:1,
 		buttonactive:false,
-		
 		loading:false,
 		date:new Date().toLocaleDateString('en-GB'),
 		consumototal:0,
