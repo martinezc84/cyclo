@@ -502,7 +502,7 @@ export default class Formula extends Component {
 
 					formula.insumos.map((linea, i)=> (
 		
-						guardar = linea.item_id.length>1 ? true : false
+						guardar = linea.item_id>0 ? true : false
 			
 					));
 					
@@ -539,7 +539,7 @@ export default class Formula extends Component {
 		
 				));
 
-					let poststr = JSON.stringify(formula)
+				let poststr = JSON.stringify(formula)
 				console.log(poststr)
 				let data;
 
