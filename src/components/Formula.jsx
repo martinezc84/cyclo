@@ -90,12 +90,12 @@ export default class Formula extends Component {
 		});
 		
 			let { action, comprables, vendibles, itemst  } = this.props;
-			
+			//console.log(itemst)
 			if(action!='new'){
 				let id = this.props.id
 				Axios.get(FUNCIONES.formula+"?id="+id)
 				.then(({ data }) => {
-					//console.log(data)
+					console.log(data)
 					let items
 					let unico
 					let rv
@@ -219,13 +219,18 @@ export default class Formula extends Component {
 	SelectItem = (e, item) => {
 		let id = item.id;
 		id = id.toString().split("_");
+		console.log(this.state.items)
 		if(id[0]=='insumo'){
 			let insumos = this.state.insumos
+			//console.log(id[1])
+			//console.log(item.value)
 			insumos.map((insumo, i)=> (
-				//console.log(invoice)
+				//console.log(insumo)
 				insumo.id == id[1] ? insumo.item_id = item.value : false		
 	
 			));
+			console.log(insumos)
+
 			this.setState(
 				{
 					insumos:insumos
@@ -459,9 +464,9 @@ export default class Formula extends Component {
 	
 	  guardar_formula = async () => {
 	
-		/*this.setState({
+		this.setState({
 			visible: false
-        });*/
+        });
         
        
 	
@@ -497,7 +502,7 @@ export default class Formula extends Component {
 
 					formula.insumos.map((linea, i)=> (
 		
-						guardar = linea.item_id>0 ? true : false
+						guardar = linea.item_id.length>1 ? true : false
 			
 					));
 					
@@ -543,9 +548,11 @@ export default class Formula extends Component {
 				}else{
 				guardar ?  data = await Axios.post(FUNCIONES.editarformula, poststr) : null
 				}
-				//console.log(data.data)
+
+				console.log(guardar)
+				if(guardar){
 				let res =data.data
-				console.log(res.data)
+				//console.log(res.data)
 				if (res.data.id!==undefined){
 					this.setState({
 					
@@ -559,7 +566,13 @@ export default class Formula extends Component {
 						errormsj:"Sus datos no se guardaron, contacte al Administrador"
 					});
 				}
-
+			}else{
+				this.setState({
+					
+					visiblee:true,
+					errormsj:"Sus datos no se guardaron, contacte al Administrador"
+				});
+			}
 					
 				}else{
 					this.setState({

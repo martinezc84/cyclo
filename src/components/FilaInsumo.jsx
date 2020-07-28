@@ -38,7 +38,7 @@ export default class FilaInsumo extends Component {
 		let {  items, item_id, selectitem, id, unico, esunico, cantidad, view, buscaritem } = this.props;
 		let insumo=null
 		
-			item_id = parseInt(item_id)
+			//item_id = parseInt(item_id)
 			if(view){
 		 	insumo = buscaritem(item_id, items)
 		}
@@ -73,7 +73,7 @@ export default class FilaInsumo extends Component {
 			<Table.Cell>
 				{items!==null?(
 			<Dropdown
-				  value={item_id}
+				value={item_id}
 				placeholder='Item'
 				onChange={selectitem}
 				search

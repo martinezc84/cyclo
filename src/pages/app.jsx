@@ -110,6 +110,7 @@ export default class App extends Component {
 	}
 
 	guardar = (state, valores) => {
+		console.log(state)
 		this.setState({
 			[state]: valores
 		});
@@ -205,7 +206,7 @@ export default class App extends Component {
 		}));
 	};
 
-	async vendibles(){
+	async vendiblesold(){
 		
 		let vendibles
 		let itemst
@@ -216,7 +217,7 @@ export default class App extends Component {
 
 			vendibles = res.data.bundles
 			itemst = res.data.items
-			//console.log(itemst)
+			console.log(itemst)
 			itemst = this.trataItems(itemst)
 			vendibles = this.trataItems(vendibles)
 			console.log(itemst)
@@ -226,6 +227,76 @@ export default class App extends Component {
 			this.guardarmem("itemst", itemst);
 			this.setState({
 				vendibles: vendibles,
+				itemst:itemst
+			})
+			//cargar comprables
+			return true
+			
+			
+		
+		
+	}else{
+		this.setState({
+			vendibles:this.getmem("vendibles"),
+			itemst:this.getmem("itemst")
+			
+		});
+		return false
+	}
+	}
+
+	async vendibles(){
+		
+		let vendibles
+		let itemst=[]
+		window.localStorage.removeItem("vendibles")
+		//console.log(this.getmem("vendibles"))
+		if(this.getmem("vendibles")===undefined){
+		let res = await Axios.get(`${FUNCIONES.vendibles}`)
+		
+			vendibles = res.data;
+			
+			for(let categoria in vendibles){
+				console.log(categoria)
+				let itemes=vendibles[categoria];
+				console.log(itemes)
+
+				for(let item in itemes){
+
+					let itemdata={key: item,
+						value: item,
+						text: itemes[item].name,
+						code: itemes[item].code}
+
+						itemst.push(itemdata);
+					//console.log(item)
+					//console.log(itemes[item])
+
+				}
+				//itemst = this.trataItems(itemst)
+				//vendibles = this.trataItems(vendibles)
+				//console.log(itemst)
+				//console.log(vendibles)
+				//vendibles = [];
+				this.guardar('vendibles', itemst);
+				this.guardar('itemst', itemst);
+				this.guardarmem("vendibles", itemst);
+				this.guardarmem("itemst", itemst);
+			}
+
+			/*vendibles = res.data.bundles
+			itemst = res.data.items
+			console.log(vendibles)
+			console.log(itemst)
+			itemst = this.trataItems(itemst)
+			vendibles = this.trataItems(vendibles)
+			console.log(itemst)
+			console.log(vendibles)
+			this.guardar('vendibles', vendibles);
+			this.guardarmem("vendibles", vendibles);
+			this.guardarmem("itemst", itemst);*/
+			this.setState({
+				vendibles: itemst,
 				itemst:itemst
 			})
 			//cargar comprables
