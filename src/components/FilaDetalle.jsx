@@ -71,11 +71,9 @@ export default class FilaDetalle extends Component {
 					type="text"
 					name="cantidad"
 					value={cantidad}
-					//onChange={this.handleInputChange}
+					onChange={this.handleInputChange}
 					className="inputform"
-					onDoubleClick={() => {
-						pesar(id);
-					}}
+					
 		  			/>
 			
 			</Table.Cell>

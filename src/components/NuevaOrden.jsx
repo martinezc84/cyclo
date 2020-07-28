@@ -79,7 +79,7 @@ export default class NuevaOrden extends Component {
 	
 			));	
 		}
-		//console.log(insumos)
+		console.log(detalle)
 		this.setState(
 			{
 				detalle:detalle
