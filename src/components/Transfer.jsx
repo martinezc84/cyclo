@@ -695,7 +695,7 @@ export default class Formula extends Component {
 							cantidad={t.booked_quantity}							
 							guardarcantidad={guardarcantidad}
 							guardarlote={this.guardarlote}
-							pesar={this.pesar}
+							//pesar={this.pesar}
 						/>
 					))}
 			</Table.Body>
