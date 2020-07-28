@@ -97,6 +97,60 @@ export default class Iniciar extends Component {
 	return 0;
 
 }
+
+pesarr=async (id)=>{
+
+		
+
+	let pesoanterior=""
+	let listo = false
+	let x=0
+	let y=0
+	if (this.state.equipo_id != 0){
+		while(!listo){	
+
+			await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
+			.then(res => {
+			let persons = res.data.peso;
+			console.log(persons)
+
+			if(persons==pesoanterior){
+				y++
+				console.log("iguales")
+				if(y==2)
+					//console.log("capturado: "+pesoanterior)
+					listo=true
+					let recursos = this.state.recursos
+					recursos.map((linea, i)=> (
+					
+						linea.id == id ? linea.cantidad = parseFloat(pesoanterior) : false		
+
+					));		
+	
+						this.setState(
+							{
+								recursos:recursos
+							})
+					return pesoanterior
+					
+
+			}else{
+				pesoanterior = persons
+				y=0
+			}
+			})
+			x++
+			if (x==10)
+				listo=true
+			
+		}
+	}else{
+		alert("Seleccione equipo!");
+	}
+
+return 0;
+
+}
 	
     
     guardar = (dte) => {
@@ -646,8 +700,11 @@ export default class Iniciar extends Component {
 					name="cantidad"
 					id={t.id}
                     value={t.cantidad}
-					onChange={this.handleInputChange}				
-                    className="inputform"
+					//onChange={this.handleInputChange}				
+					className="inputform"
+					onDoubleClick={() => {
+						this.pesarr(t.id);
+					}}
                   />}</Table.Cell>
 				  <Table.Cell>{<input
 				  placeholder={"Lote"}
