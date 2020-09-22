@@ -5,7 +5,7 @@
 
 [build.environment]
   # Dominio del sitio de producción (Frontend)
-	#GATSBY_NFUNC_URL_PREFIX= 'https://heuristic-jang-ecc928.netlify.com'
+	GATSBY_NFUNC_URL_PREFIX= 'https://heuristic-jang-ecc928.netlify.app'
 	
 	# Locations de las netlify functions (Backend) 
 	# Son los mismos nombres de los archivos que hay en la carpeta /src/service
