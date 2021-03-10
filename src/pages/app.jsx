@@ -17,6 +17,7 @@ import Existencias from '../components/Existencias';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
+import Alimentar from '../components/Alimentar';
 import CerdosNuevos from '../components/CerdosNuevos';
 import Login from '../components/Login';
 import NuevaOrden from '../components/NuevaOrden';
@@ -522,6 +523,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordenescompra" component={OrdenesCompra} guardar={this.guardar} {...propsOP}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordencompra/:action/:id" component={OrdenCompra} guardar={this.guardar} {...propsPOD}  ></RutaPrivada>
 			<RutaPrivada  path="/app/transferencias/:action/:id" component={Transfer} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
+			<RutaPrivada  path="/app/alimentar/:action/:id" component={Alimentar} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/iniciar/:id" component={Iniciar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/orden/terminar/:id" component={Terminar} guardar={this.guardar} {...propsIni}  ></RutaPrivada>
 			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>

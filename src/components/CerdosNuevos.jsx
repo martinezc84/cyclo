@@ -301,9 +301,11 @@ export default class CerdosNuevos extends Component {
 					let lineas = this.state.lineas
 					for (let linea in lineas){
 
-						let data={store_id:this.state.userdata.store,name:lineas[linea].name,symptom:"nuevo",  item_id:47395,customer_id:288956,description:"prueba",payee_info:"",ini_item_id:223785,user:"dipro"}
+						let data={store_id:this.state.userdata.store,name:lineas[linea].name,symptom:"nuevo",  item_id:47395, quantity:lineas[linea].quantity,customer_id:288956,description:"INGRESO LECHONES",payee_info:"VENTASDIPRO",ini_item_id:336443,user:"dipro"}
 
-						 let resp = await Axios.post(`${FUNCIONES.postapi+"?method=abrir_caso"}`,data)
+						//console.log(data)
+
+						let resp = await Axios.post(FUNCIONES.postapi+"?method=abrir_caso",JSON.stringify(data))
 						
 							console.log(resp)
 					}
@@ -388,12 +390,12 @@ export default class CerdosNuevos extends Component {
 			const name = target.name
 			let id = target.id
 			
-				let referencias = this.state.referencias
+				let referencias = this.state.lineas
 				id = id.split("_")
 				
 				referencias.map((ref, i)=> (
 		
-					ref.id == id[1]  ? ref.peso = value :  false	
+					ref.id == id[1]  ? ref.quantity = value :  false	
 		
 				));	
 				//console.log(referencias)
@@ -496,7 +498,7 @@ export default class CerdosNuevos extends Component {
 				<Table.HeaderCell
 					
 				>
-					PESO
+					CANTIDAD
 				</Table.HeaderCell>
 				
 				</Table.Row>
@@ -510,28 +512,19 @@ export default class CerdosNuevos extends Component {
 					
 					
 					 
-					<Table.Cell>{<input
-					autoFocus
-                    type="text"
-					name="name"
-					id={"name_"+t.id}
-                    value={t.name}
-					onChange={this.handleInputChange}				
-                    className="inputform"
-				  />}
+					<Table.Cell>Lechon
 				 
 				  </Table.Cell>
 				  <Table.Cell>{<input
 					autoFocus
-                    type="text"
+                    type="number"
 					name="peso"
 					id={"peso_"+t.id}
                     value={t.quantity}
-					//onChange={this.handleInputChangepeso}				
+					onChange={this.handleInputChangepeso}				
 					className="inputform"
-					onDoubleClick={() => {
-						this.pesar(t.id);
-					}}
+					placeholder="Cantidad"
+					
 				  />}
 				 
 				  </Table.Cell>

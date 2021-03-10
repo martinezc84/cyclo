@@ -31,7 +31,8 @@ export default class Formula extends Component {
 		errormsj:"Error",
 		date:new Date().toLocaleDateString('en-US',{year: 'numeric', month: '2-digit', day: '2-digit'}),
 		empleado:0,
-		equipo_id:0
+		caseid:0,
+		caseslist:[]
 				
 	};
 	
@@ -68,16 +69,6 @@ export default class Formula extends Component {
 			let { action, comprables, vendibles  } = this.props;
 
 			let res = await this.empleados();
-			res = await this.equipos();
-			await Axios.get(FUNCIONES.getip)
-				.then(({ data }) => {
-					let ip = data.ip
-
-					console.log(ip)
-					this.setState({
-						ip
-					});
-				})
 			
 			if(action!='new'){
 				let id = this.props.id
@@ -92,6 +83,8 @@ export default class Formula extends Component {
 				.catch((error) => {
 					console.error(error);
 				});
+
+				
 			}else{
 				this.setState({
 					nombre: "",					
@@ -104,6 +97,19 @@ export default class Formula extends Component {
 					vendibles:vendibles
 				});
 			}
+			Axios.get(FUNCIONES.getapi+"?method=caseslist&store_id=5")
+				.then(({ data }) => {
+					console.log(data)
+
+					let caseslist=this.trataCasos(data)
+						
+					this.setState({
+						caseslist:caseslist
+					});
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 
 			let items = [...comprables, vendibles]
 			this.setState ({
@@ -111,7 +117,7 @@ export default class Formula extends Component {
 				items:items,
 				action:action,
 				guardarcantidad:this.guardarcantidad,
-				Selectequipo:this.Selectequipo
+			
 				
 			});
 					
@@ -121,68 +127,7 @@ export default class Formula extends Component {
     
 }
 
-pesar=async (id)=>{
 
-		
-
-	let pesoanterior=""
-	let listo = false
-	let x=0
-	let y=0
-	if (this.state.equipo_id != 0){
-		while(!listo){	
-
-			await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
-			.then(res => {
-			let persons = res.data.peso;
-			console.log(persons)
-
-			if(persons==pesoanterior){
-				y++
-				console.log("iguales")
-				if(y==2)
-					//console.log("capturado: "+pesoanterior)
-					listo=true
-					let detalle = this.state.insumos
-					detalle.map((linea, i)=> (
-					
-						linea.id == id ? linea.booked_quantity = parseFloat(pesoanterior) : false		
-
-					));		
-	
-						this.setState(
-							{
-								detalle:detalle
-							})
-					return pesoanterior
-					
-
-			}else{
-				pesoanterior = persons
-				y=0
-			}
-			})
-			x++
-			if (x==10)
-				listo=true
-			
-		}
-	}else{
-		alert("Seleccione equipo!");
-	}
-
-return 0;
-
-}
-
-Selectequipo = (e, item) => {
-	//console.log(item)
-	this.setState(
-		{
-			equipo_id:item.value
-		})
-	
-};
 
 	SeleccionarTipo = (e, item) => {
 		
@@ -355,39 +300,14 @@ Selectequipo = (e, item) => {
 		}));
 	};
 
-	async equipos(){
-		if(this.props.getmem('equipos')===undefined){
-			let userdata = getUser()
-				try {
-					
-					let res = await Axios.get(FUNCIONES.equipos+"?id=5");
-					let equipos = res.data
-					equipos = this.trataEquipo(equipos)
-					console.log(equipos)
-					this.props.guardarmem('equipos', equipos);
-					
-					this.setState({
-						equipos: equipos,
-						
-					});
-	
-					//cargar formula
-					return true
-					
-				
-				}catch(error) {
-					console.error(error);
-					return false
-				};
-			}else{
-				//console.log(this.props.getmem('equipos'))
-				this.setState({
-					equipos:this.props.getmem('equipos')
-					
-				});
-				return true
-			}
-	}
+	trataCasos= (empleados) => {
+		return empleados.map((t) => ({
+			key: t.id,
+			value: t.symptom,
+			text: t.symptom,
+			
+		}));
+	};
 
 	async empleados(){
 		if(this.props.getmem('empleados')===undefined){
@@ -435,83 +355,92 @@ Selectequipo = (e, item) => {
 			try {
 			
 				let guardar =true;
-				let booking ={
-					
-					booker_id:this.state.empleado,
-					planned_delivery:this.state.date,
-					movements_attributes:"|insumos|",
-					needs_transport:0,
-					agency_from_id:this.state.from_agency,
-					agency_to_id:this.state.to_agency,
-					reference:this.state.nombre,
-				
-					memo:"",
-					payee_id:393185,
-					
-				}
-				let shipment = {shipment:booking}
-				if((booking.reference!=="")  ){
-					let x=0
-					
-					let lot_id
-					let stringdet="{"
-					let insumos = this.state.insumos
-					for (let linea in insumos){
-						if(x>0) stringdet+=","
-						if(insumos[linea].lote!=""){ 
-							lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote+"&item_id="+insumos[linea].item_id)
-							lot_id = lot_id.data.id
-							Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+insumos[linea].booked_quantity+'","agencia_id":"'+this.state.to_agency+'"}')
-					   }else{
-						   lot_id = ""
-					   }
-						stringdet+='"'+x+'":{"item_id":"'+insumos[linea].item_id+'", "booked_quantity":"'+insumos[linea].booked_quantity+'", "lot_id":"'+lot_id+'"}'
-						x++
-					}
-					stringdet+="}"
+				let  caseids
+				let data = await Axios.get(FUNCIONES.getapi+"?method=casebyname&case="+this.state.caseid)
+				caseids = data.data;
+				console.log(caseids)
+				let cerditos = caseids.length
 
-					
-				let poststr = JSON.stringify(shipment)
-				//console.log(poststr)
-				poststr= poststr.replace('"|insumos|"',stringdet)
-				let data;
-				//console.log(poststr)
-
-				await Axios.post(`${FUNCIONES.reservaciones}`,poststr)
-				.then(({ data }) => {
-
-					Axios.post(FUNCIONES.deliver+"?id="+data.id)
-
-					this.setState({
-						loading:false,
-						visible:true,
+				for(let case_id in caseids){
+					console.log(caseids[case_id])
+					let invoice ={
+						seller_id:this.state.empleado,
+						date:this.state.date,
+						payment_term_id:447,
+						invoice_details_attributes:"|insumos|",
+						needs_transport:0,
+						agency_id:this.state.from_agency,
+						reference:this.state.nombre,
+						currency_id:1,
+						memo:"",
+						payee_id:393185,
+						case_id:caseids[case_id].case_id,
+						taxable:0,
 						
-					});
-					//console.log(data)	
-				})
-				.catch((error) => {
-					//console.error(error);
+					}
+					let shipment = {invoice:invoice}
+					if((invoice.reference!=="")  ){
+						let x=0
+						
+						let lot_id
+						let stringdet="{"
+						let insumos = this.state.insumos
+						for (let linea in insumos){
+							if(x>0) stringdet+=","
+							if(insumos[linea].lote!=""){ 
+								lot_id = await Axios.get(FUNCIONES.lote+'?id='+insumos[linea].lote+"&item_id="+insumos[linea].item_id)
+								lot_id = lot_id.data.id
+								Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+(insumos[linea].booked_quantity/cerditos).toFixed(0)+'","agencia_id":"'+this.state.to_agency+'"}')
+						}else{
+							lot_id = ""
+						}
+							stringdet+='"'+x+'":{"item_id":"'+insumos[linea].item_id+'", "quantity":"'+(insumos[linea].booked_quantity/cerditos).toFixed(0)+'", "lot_id":"'+lot_id+'"}'
+							x++
+						}
+						stringdet+="}"
+
+						
+					let poststr = JSON.stringify(shipment)
+					//console.log(poststr)
+					poststr= poststr.replace('"|insumos|"',stringdet)
+					let data;
+					console.log(poststr)
+
+					await Axios.post(`${FUNCIONES.postapi+'?method=postdata'}`,poststr)
+					.then(({ data }) => {
+
+						
+
+						this.setState({
+							loading:false,
+							visible:true,
+							
+						});
+						//console.log(data)	
+					})
+					.catch((error) => {
+						//console.error(error);
+
+						
+							this.setState({
+								loading:false,
+								visiblee:true,
+								errormsj:"Sus datos no se guardaron, contacte al Administrador \n"+JSON.stringify(error.response.data)
+							});
+						
 
 					
+					});
+						
+					}else{
 						this.setState({
 							loading:false,
 							visiblee:true,
-							errormsj:"Sus datos no se guardaron, contacte al Administrador \n"+JSON.stringify(error.response.data)
+							errormsj:"Llene todos los datos del formulario"
 						});
-					
-
-				
-				});
-					
-				}else{
-					this.setState({
-						loading:false,
-						visiblee:true,
-						errormsj:"Llene todos los datos del formulario"
-					});
-				}
+					}
 			
-				
+				}
 			
 				//console.log(data)
 			} catch (error) {
@@ -598,7 +527,58 @@ Selectequipo = (e, item) => {
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
 
+					pesar=async (id)=>{
+
+						let pesoanterior=""
+						let listo = false
+						let x=0
+						let y=0
+						while(!listo){
 				
+							Axios.get(FUNCIONES.getpeso)
+							.then(res => {
+							  let persons = res.data.peso;
+							  //console.log(persons)
+				
+							  if(persons==pesoanterior){
+								y++
+								//console.log("iguales")
+								if(y==3)
+									console.log("capturado: "+pesoanterior)
+									listo=true
+				
+									
+											let lineas = this.state.insumos
+											//console.log(id)						
+											lineas.map((ref, i)=> (
+												//console.log(ref.id)
+												ref.id == id  ? ref.booked_quantity = parseFloat(pesoanterior) :  false	
+									
+											));	
+											//console.log(referencias)
+											this.setState({
+												lineas
+											})
+								
+									
+									return pesoanterior
+									
+				
+							  }else{
+								  pesoanterior = persons
+								  y=0
+							  }
+							})
+							  x++
+							  if (x==6)
+								  listo=true
+							
+						}
+				
+					return 0;
+				
+				
+					}
 					
 
 				
@@ -614,8 +594,9 @@ Selectequipo = (e, item) => {
 			guardarcantidad,				
 			from_agency,
 			to_agency,
-            nombre, items, action, empleado, empleados, loading, equipo_id, Selectequipo,equipos
-			
+			nombre, items, action, empleado, empleados, loading, 
+			caseslist, 
+			caseid
 		} = this.state;
 
 	
@@ -656,16 +637,6 @@ Selectequipo = (e, item) => {
 							/>
 				</label>
 			</Grid.Column>
-			<Grid.Column> 
-			<label>Equipo<Dropdown
-						value={equipo_id}
-						placeholder='Equipo'
-						onChange={Selectequipo}					
-						selection
-						options={equipos}
-						className="ui segment"
-					/></label>
-			</Grid.Column>
 						
 		</Grid.Row>
 			
@@ -704,14 +675,14 @@ Selectequipo = (e, item) => {
 			</label></Grid.Column><Grid.Column><label>
 			  Destino
 			  <Dropdown
-					  value={to_agency}
+					  value={caseid}
 					placeholder='Agencia'
 					onChange={this.selectAg}
 					search
 					selection
-					options={agencias}
+					options={caseslist}
 					className="mr-sm-2"
-					name="to_agency"
+					name="caseid"
 				/>
 			</label></Grid.Column></Grid.Row>
 
@@ -760,7 +731,7 @@ Selectequipo = (e, item) => {
 							cantidad={t.booked_quantity}							
 							guardarcantidad={guardarcantidad}
 							guardarlote={this.guardarlote}
-							pesar={this.pesar}
+							//pesar={this.pesar}
 						/>
 					))}
 			</Table.Body>

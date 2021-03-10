@@ -16,10 +16,16 @@ const headersr = {
 exports.handler = (event, context, callback) => {
 	
 	console.log(event.body);
+	let parameters = event.queryStringParameters;
 	let method = event.queryStringParameters.method;
-	//console.log('https://dcgse.com/calendario_api/apiprod/'+method);
+	event.queryStringParameters.method='';
+	let paramstring="?"
+	for (let key in parameters){
+		paramstring=paramstring+"&"+key+"="+parameters[key]
+		};
+	console.log('https://dcgse.com/calendario_api/apiprod/'+method+paramstring);
 	return axios
-		.post('https://dcgse.com/calendario_api/apiprod/'+method, event.body, { headers: headers })
+		.post('https://dcgse.com/calendario_api/apiprod/'+method+paramstring, event.body, { headers: headers })
 		.then((data) => {
 			
 			console.log(data);
