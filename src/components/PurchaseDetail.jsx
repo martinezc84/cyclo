@@ -96,7 +96,7 @@ export default class UnpaidInvoices extends Component {
 
 	agregarlinea=(codigo, idl)=>{
 		//console.log(codigo)
-		if(codigo!=""){
+		if(codigo!="" && codigo.length==13){
 			let nuevo;
 			let codes = []
 			let codigos = []
@@ -117,6 +117,8 @@ export default class UnpaidInvoices extends Component {
 			
 		});
 		
+		}else{
+			alert("Codigo inválido")
 		}
 
 		let items = [...this.state.Cells];
