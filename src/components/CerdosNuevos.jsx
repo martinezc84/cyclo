@@ -301,7 +301,7 @@ export default class CerdosNuevos extends Component {
 					let lineas = this.state.lineas
 					for (let linea in lineas){
 
-						let data={store_id:this.state.userdata.store,name:lineas[linea].name,symptom:"nuevo",  item_id:47395, quantity:lineas[linea].quantity,customer_id:288956,description:"INGRESO LECHONES",payee_info:"VENTASDIPRO",ini_item_id:376531,user:"dipro"}
+						let data={store_id:this.state.userdata.store,name:lineas[linea].name,symptom:"nuevo",  item_id:47395, quantity:lineas[linea].quantity,customer_id:288956,description:"INGRESO LECHONES",payee_info:"VENTASDIPRO",ini_item_id:376531,item_lot:377216,user:"dipro"}
 
 						//console.log(data)
 
