@@ -48,22 +48,23 @@ export default class Iniciar extends Component {
 
 
 	pesar=async (id, campo)=>{
-
+		console.log(id)
+		console.log(campo)
 		let pesoanterior=""
 		let listo = false
 		let x=0
 		let y=0
 		while(!listo){
 
-			Axios.post(FUNCIONES.getpeso, '{"ip":"'+this.state.ip+'"}')
+			await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
 			.then(res => {
-			  let persons = res.data;
+			  let persons = res.data.peso;
 			  //console.log(persons)
 
 			  if(persons==pesoanterior){
 				y++
 				//console.log("iguales")
-				if(y==30)
+				if(y==2)
 					console.log("capturado: "+pesoanterior)
 					listo=true
 
@@ -884,15 +885,15 @@ trataEquipo= (empleados) => {
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
 
-					Selectequipo = (e, item) => {
-						//console.log(item)
-						this.setState(
-							{
-								equipo_id:item.value
-							})
-						
-					};
-					
+		Selectequipo = (e, item) => {
+			//console.log(item)
+			this.setState(
+				{
+					equipo_id:item.value
+				})
+			
+		};
+		
 
 				
 
@@ -915,26 +916,28 @@ trataEquipo= (empleados) => {
 			return(
 				<div >
                 <form onSubmit={this.handleSubmit}>
-
+				<React.Fragment>
+				<Grid columns={1}>
+					<Grid.Row>
+						
+						<Grid.Column> 
+						<label>Equipo<Dropdown
+									value={equipo_id}
+									placeholder='Equipo'
+									onChange={Selectequipo}					
+									selection
+									options={equipos}
+									className="ui segment"
+								/></label>
+						</Grid.Column>
+									
+					</Grid.Row>
+					</Grid>
+				</React.Fragment>
 				{  (referencias.length>0 || lotes.length>0)?(
 				
 				<React.Fragment>
-					<Grid columns={1}>
-		<Grid.Row>
-			
-			<Grid.Column> 
-			<label>Equipo<Dropdown
-						value={equipo_id}
-						placeholder='Equipo'
-						onChange={Selectequipo}					
-						selection
-						options={equipos}
-						className="ui segment"
-					/></label>
-			</Grid.Column>
-						
-		</Grid.Row>
-		</Grid>
+					
 					<p >REFERENCIAS</p>
 			<Table sortable celled>
 			<Table.Header>
@@ -1120,7 +1123,7 @@ trataEquipo= (empleados) => {
                     type="text"
 					name="rendimiento"
 					id={"rendi_"+t.id}
-                    value={t.serie}
+                    value={t.cantidad}
 					//onChange={this.handleInputChange}				
 					className="inputform"
 					onDoubleClick={() => {
