@@ -29,7 +29,7 @@ export default class Formula extends Component {
 		show:false,
 		visiblee:false,
 		errormsj:"Error",
-		date:new Date().toLocaleDateString('en-US',{year: 'numeric', month: '2-digit', day: '2-digit'}),
+		date:new Date().toLocaleDateString('es-GT',{year: 'numeric', month: '2-digit', day: '2-digit'}),
 		empleado:0,
 		equipo_id:0
 				
@@ -653,6 +653,7 @@ Selectequipo = (e, item) => {
 							dateFormat="DD/MM/YYYY"
 							icon={false}
 							initialDat={this.state.date}
+							
 							/>
 				</label>
 			</Grid.Column>

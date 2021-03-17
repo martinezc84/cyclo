@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../css/style.css';
 import Axios from 'axios';
 import { FUNCIONES, descarte, production } from '../utils/utils';
-import { Header, Table, Dropdown, Checkbox, Loader } from 'semantic-ui-react';
+import { Header, Table, Dropdown, Grid, Loader } from 'semantic-ui-react';
 import { MostrarMensaje } from './Mensajes';
 import { Msjerror } from './Mensajeserror';
 import { isLoggedIn, logout , getUser} from "../utils/identity"
@@ -34,7 +34,7 @@ export default class Iniciar extends Component {
 		consumototal:0,
 		ip:"192.168.100.1",
 		pesocapturado:"0",
-				
+		equipo_id:0
 	};
 	
 	
@@ -190,6 +190,7 @@ export default class Iniciar extends Component {
 				let formula={}
 				let formula_id
 				let resp = await Axios.get(FUNCIONES.orden+"?id="+id)
+				let res = await this.equipos();
 				if (resp.data.id!=undefined){
 					let data = resp.data
 					//console.log(data)
@@ -327,6 +328,7 @@ export default class Iniciar extends Component {
 				guardarcantidad:this.guardarcantidad,
 				guardarcantidadpt:this.guardarcantidadpt,
 				guardarcantidadflex:this.guardarcantidadflex,
+				Selectequipo:this.Selectequipo,
 				loading:false
 			});
 					
@@ -335,6 +337,48 @@ export default class Iniciar extends Component {
 			
     
 }
+
+async equipos(){
+	if(this.props.getmem('equipos')===undefined){
+		let userdata = getUser()
+			try {
+				
+				let res = await Axios.get(FUNCIONES.equipos+"?id=5");
+				let equipos = res.data
+				equipos = this.trataEquipo(equipos)
+				console.log(equipos)
+				this.props.guardarmem('equipos', equipos);
+				
+				this.setState({
+					equipos: equipos,
+					
+				});
+
+				//cargar formula
+				return true
+				
+			
+			}catch(error) {
+				console.error(error);
+				return false
+			};
+		}else{
+			//console.log(this.props.getmem('equipos'))
+			this.setState({
+				equipos:this.props.getmem('equipos')
+				
+			});
+			return true
+		}
+}
+trataEquipo= (empleados) => {
+	return empleados.map((t) => ({
+		key: t.id,
+		value: t.id,
+		text: t.name,
+		
+	}));
+};
 
 	guardarcantidad = (id, cantidad) => {
 		let insumos = this.state.insumos
@@ -839,6 +883,15 @@ export default class Iniciar extends Component {
             this.guardar_formula()
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
+
+					Selectequipo = (e, item) => {
+						//console.log(item)
+						this.setState(
+							{
+								equipo_id:item.value
+							})
+						
+					};
 					
 
 				
@@ -849,7 +902,7 @@ export default class Iniciar extends Component {
 
 		let {
 				
-			referencias, desperdicios, loading, rendimientos, lotes
+			referencias, desperdicios, loading, rendimientos, lotes, equipo_id, Selectequipo, equipos
            
 			
 		} = this.state;
@@ -863,7 +916,26 @@ export default class Iniciar extends Component {
 				<div >
                 <form onSubmit={this.handleSubmit}>
 
-				{  (referencias.length>0 || lotes.length>0)?(<React.Fragment><p >REFERENCIAS</p>
+				{  (referencias.length>0 || lotes.length>0)?(
+				
+				<React.Fragment>
+					<Grid columns={1}>
+		<Grid.Row>
+			
+			<Grid.Column> 
+			<label>Equipo<Dropdown
+						value={equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="ui segment"
+					/></label>
+			</Grid.Column>
+						
+		</Grid.Row>
+		</Grid>
+					<p >REFERENCIAS</p>
 			<Table sortable celled>
 			<Table.Header>
 			<Table.Row>
