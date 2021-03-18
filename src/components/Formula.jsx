@@ -103,6 +103,7 @@ export default class Formula extends Component {
 					let gl
 					let formula = data
 					let insumos = data.insumos
+					console.log(insumos)
 					insumos.map((insumo, i)=> (
 						//console.log(invoice)
 						insumo.unico ==1 ? insumo.unico = true  :insumo.unico = false
@@ -1044,7 +1045,7 @@ export default class Formula extends Component {
 					insumos.map((t) => (						
 						<FilaInsumo
 							//key={t.id}
-							items={items}
+							items={comprables}
 							selectitem={this.SelectItem}
 							id={t.id}
 							unico={t.unico}
@@ -1287,7 +1288,7 @@ export default class Formula extends Component {
 					insumos
 					.map((t) => (
 						<FilaInsumo
-							items={items}
+							items={comprables}
 							selectitem={this.SelectItem}
 							id={t.id}
 							unico={t.unico}

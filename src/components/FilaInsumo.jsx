@@ -33,12 +33,11 @@ export default class FilaInsumo extends Component {
 		})
 	  }
 	
-
 	render() {
 		let {  items, item_id, selectitem, id, unico, esunico, cantidad, view, buscaritem } = this.props;
 		let insumo=null
 		
-			//item_id = parseInt(item_id)
+			item_id = parseInt(item_id)
 			if(view){
 		 	insumo = buscaritem(item_id, items)
 		}
