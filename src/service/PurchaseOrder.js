@@ -22,9 +22,11 @@ exports.handler = async (event, context) => {
 		
 		let id = event.queryStringParameters.id;
 		let { data } = await axios.get(url+id+'.json' ,{ headers });
+		console.log(data);
 		return {
 			statusCode: 200,
 			headers:headersr,
+			
 			body: JSON.stringify(data)
 		};
 	} catch (error) {
