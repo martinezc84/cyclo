@@ -104,6 +104,7 @@ export default class UnpaidInvoices extends Component {
 	}
 
 	ver(id){
+		console.log(id)
 		navigate('/app/ordencompra/edit/'+id)
 	}
 

@@ -186,16 +186,7 @@ export default class PurchaseDetail extends Component {
 				
 			});
 			let res = await this.equipos();
-			await Axios.get(FUNCIONES.getip)
-				.then(({ data }) => {
-					let ip = data.ip
-
-					console.log(ip)
-					this.setState({
-						ip
-					});
-				})
-				
+							
 				
 				let id = parseInt(this.props.id)
 				let detalle = []
@@ -210,9 +201,9 @@ export default class PurchaseDetail extends Component {
 					let date = new Date();
 					var options = {  year: 'numeric', month: '2-digit', day: '2-digit', hour12: false, hour: '2-digit', minute: '2-digit' };
 					let fechastr = date.toLocaleString('en-US',options);
-					console.log(fechastr)
+					//console.log(fechastr)
 					let hotastr = fechastr.substring(12,16)
-					console.log(hotastr)
+					//console.log(hotastr)
 					fechastr = fechastr.substring(0,10)
 					fechastr = fechastr.trim();
 					let fecha = fechastr.split('/');
@@ -674,9 +665,9 @@ async equipos(){
 
 	render() {
 		
-		let { items, itemst, agencias } = this.props
+		let { items,  agencias } = this.props
 		
-		items = [items,...itemst]
+		items = [items]
 		let {
 		loading, equipos, action, equipo_id, Selectequipo,  detalle, orden
 			
