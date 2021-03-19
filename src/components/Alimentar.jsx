@@ -32,7 +32,9 @@ export default class Formula extends Component {
 		date:new Date().toLocaleDateString('es-GT',{year: 'numeric', month: '2-digit', day: '2-digit'}),
 		empleado:0,
 		caseid:0,
-		caseslist:[]
+		caseslist:[],
+		equipos:[],
+		quipo_id:0
 				
 	};
 	
@@ -58,7 +60,39 @@ export default class Formula extends Component {
 
 	};
 
+	async equipos(){
+		if(this.props.getmem('equipos')===undefined){
+			let userdata = getUser()
+				try {
+					
+					let res = await Axios.get(FUNCIONES.equipos+"?id=5");
+					let equipos = res.data
+					equipos = this.trataEquipo(equipos)
+					console.log(equipos)
+					this.props.guardarmem('equipos', equipos);
+					
+					this.setState({
+						equipos: equipos,
+						
+					});
 	
+					//cargar formula
+					return true
+					
+				
+				}catch(error) {
+					console.error(error);
+					return false
+				};
+			}else{
+				//console.log(this.props.getmem('equipos'))
+				this.setState({
+					equipos:this.props.getmem('equipos')
+					
+				});
+				return true
+			}
+	}
 
 	async componentDidMount() {
 	
@@ -69,7 +103,7 @@ export default class Formula extends Component {
 			let { action, comprables, vendibles  } = this.props;
 
 			let res = await this.empleados();
-			
+			res = await this.equipos();
 			if(action!='new'){
 				let id = this.props.id
 				Axios.get(FUNCIONES.formula+"?id="+id)
@@ -117,7 +151,7 @@ export default class Formula extends Component {
 				items:items,
 				action:action,
 				guardarcantidad:this.guardarcantidad,
-			
+				Selectequipo:this.Selectequipo
 				
 			});
 					
@@ -136,6 +170,15 @@ export default class Formula extends Component {
                 empleadoid:item.value,
 				empleado:item
 			})
+	};
+
+	Selectequipo = (e, item) => {
+		//console.log(item)
+		this.setState(
+			{
+				equipo_id:item.value
+			})
+		
 	};
 
 	selectAg = (e, item) => {
@@ -527,58 +570,59 @@ export default class Formula extends Component {
             //alert(`Welcome ${this.state.firstName} ${this.state.lastName}!`)
 					}
 
-					pesar=async (id)=>{
+		pesar=async (id)=>{
 
-						let pesoanterior=""
-						let listo = false
-						let x=0
-						let y=0
-						while(!listo){
-				
-							Axios.get(FUNCIONES.getpeso)
-							.then(res => {
-							  let persons = res.data.peso;
-							  //console.log(persons)
-				
-							  if(persons==pesoanterior){
-								y++
-								//console.log("iguales")
-								if(y==3)
-									console.log("capturado: "+pesoanterior)
-									listo=true
-				
-									
-											let lineas = this.state.insumos
-											//console.log(id)						
-											lineas.map((ref, i)=> (
-												//console.log(ref.id)
-												ref.id == id  ? ref.booked_quantity = parseFloat(pesoanterior) :  false	
-									
-											));	
-											//console.log(referencias)
-											this.setState({
-												lineas
-											})
-								
-									
-									return pesoanterior
-									
-				
-							  }else{
-								  pesoanterior = persons
-								  y=0
-							  }
-							})
-							  x++
-							  if (x==6)
-								  listo=true
+
+ 
+			let pesoanterior=""
+			let listo = false
+			let x=0
+			let y=0
+			if (this.state.equipo_id != 0){
+				while(!listo){	
+		
+					await Axios.get(FUNCIONES.getpeso+'?id='+this.state.equipo_id)
+					.then(res => {
+					let persons = res.data.peso;
+					console.log(persons)
+		
+					if(persons==pesoanterior){
+						y++
+						console.log("iguales")
+						if(y==2)
+							//console.log("capturado: "+pesoanterior)
+							listo=true
+							let detalle = this.state.insumos
+							detalle.map((linea, i)=> (
 							
-						}
-				
-					return 0;
-				
-				
+								linea.id == id ? linea.booked_quantity = parseFloat(pesoanterior) : false		
+		
+							));		
+			
+								this.setState(
+									{
+										detalle:detalle
+									})
+							return pesoanterior
+							
+		
+					}else{
+						pesoanterior = persons
+						y=0
 					}
+					})
+					x++
+					if (x==10)
+						listo=true
+					
+				}
+			}else{
+				alert("Seleccione equipo!");
+			}
+		
+		return 0;
+		
+		}
 					
 
 				
@@ -594,7 +638,7 @@ export default class Formula extends Component {
 			guardarcantidad,				
 			from_agency,
 			to_agency,
-			nombre, items, action, empleado, empleados, loading, 
+			nombre, items, action, empleado, empleados, loading, equipo_id, Selectequipo, equipos,
 			caseslist, 
 			caseid
 		} = this.state;
@@ -660,7 +704,7 @@ export default class Formula extends Component {
 							}
 
 		
-			<Grid.Row><Grid.Column><label>
+			<Grid.Row columns={3}><Grid.Column><label>
 			  Origen
 			  <Dropdown
 					  value={from_agency}
@@ -669,7 +713,7 @@ export default class Formula extends Component {
 					search
 					selection
 					options={agencias}
-					className="mr-sm-2"
+					className="mr-sm-3"
 					name="from_agency"
 				/>
 			</label></Grid.Column><Grid.Column><label>
@@ -681,10 +725,20 @@ export default class Formula extends Component {
 					search
 					selection
 					options={caseslist}
-					className="mr-sm-2"
+					className="mr-sm-3"
 					name="caseid"
 				/>
-			</label></Grid.Column></Grid.Row>
+			</label></Grid.Column>
+			<Grid.Column> 
+			<label>Equipo<Dropdown
+						value={equipo_id}
+						placeholder='Equipo'
+						onChange={Selectequipo}					
+						selection
+						options={equipos}
+						className="mr-sm-3"
+					/></label>
+			</Grid.Column></Grid.Row>
 
 			 <React.Fragment> <Grid.Row><Grid.Column><Button type="button" variant="primary"  className="submitform" onClick={() => {
 										this.agregar_item();
@@ -731,7 +785,7 @@ export default class Formula extends Component {
 							cantidad={t.booked_quantity}							
 							guardarcantidad={guardarcantidad}
 							guardarlote={this.guardarlote}
-							//pesar={this.pesar}
+							pesar={this.pesar}
 						/>
 					))}
 			</Table.Body>
