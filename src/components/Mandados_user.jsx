@@ -181,6 +181,7 @@ export default class Mandados_user extends Component {
 			})
 			
 		})
+		
 		.catch((error) => {
 			console.error(error);
 		});
