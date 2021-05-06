@@ -25,7 +25,7 @@ export default class Inputdate extends Component {
         <DateTimePicker
           onChange={this.onChange}
           value={this.state.date}
-          format="yy"
+          format="y/MM/dd H:mm:ss"
                    
          
         />
