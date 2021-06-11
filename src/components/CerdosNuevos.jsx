@@ -301,13 +301,27 @@ export default class CerdosNuevos extends Component {
 					let lineas = this.state.lineas
 					for (let linea in lineas){
 
-						let data={store_id:this.state.userdata.store,name:lineas[linea].name,symptom:"nuevo",  item_id:47395, quantity:lineas[linea].quantity,customer_id:288956,description:"INGRESO LECHONES",payee_info:"VENTASDIPRO",ini_item_id:376531,item_lot:377216,user:"dipro"}
+						let data={store_id:this.state.userdata.store, item_id:47395, customer_id:288956,description:"INGRESO LECHONES"}
 
 						//console.log(data)
+						for(let x=1;x<=lineas[linea].quantity;x++){
+							let resp = await Axios.post(FUNCIONES.postapi+"?method=crear_serie",JSON.stringify(data))
+							let datar =resp.data
+							if(datar.status=="ok"){
+								let serial_id = datar.serial_id
+								let name = datar.name;
 
-						let resp = await Axios.post(FUNCIONES.postapi+"?method=abrir_caso",JSON.stringify(data))
+								let data={store_id:this.state.userdata.store,name:name, item_id:377216}
+								Axios.post(FUNCIONES.postapi+"?method=crear_lote",JSON.stringify(data))
+
+								data={store_id:this.state.userdata.store,name:"", serial_id:serial_id, payee_info:"VENTASDIPRO",item_id:376531,user:"dipro"}
+								resp = await Axios.post(FUNCIONES.postapi+"?method=abrir_caso",JSON.stringify(data))
+								console.log(resp)
+							}
+							
+						}
+
 						
-							console.log(resp)
 					}
 					
 					this.setState({
