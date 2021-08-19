@@ -465,7 +465,7 @@ Selectequipo = (e, item) => {
 							insumos[linea].booked_quantity= insumos[linea].booked_quantity - lot_id.data.pesoactual
 							Axios.post(FUNCIONES.editarlote,'{"id":"'+lot_id+'","pesoactual":"'+pesoactual+'"}')
 							Axios.post(FUNCIONES.guardarloteag,'{"lote_id":"'+lot_id+'","cantidad":"'+pesoactual+'","agencia_id":"'+this.state.to_agency+'"}')
-					   }else{
+					   }else{ 
 						   lot_id = ""
 					   }
 						stringdet+='"'+x+'":{"item_id":"'+insumos[linea].item_id+'", "booked_quantity":"'+insumos[linea].booked_quantity+'", "lot_id":"'+lot_id+'"}'

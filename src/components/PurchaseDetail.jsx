@@ -356,6 +356,7 @@ async equipos(){
 		));
 		}
 
+<<<<<<< HEAD
 		
 		//console.log(this.state.insumos);
 			
@@ -364,6 +365,14 @@ async equipos(){
 				detalle:detalle
 			})
 	};
+=======
+	agregarlinea=(codigo, idl)=>{
+		//console.log(codigo)
+		if(codigo!="" && codigo.length==13){
+			let nuevo;
+			let codes = []
+			let codigos = []
+>>>>>>> d09db81b9b3c83247eb0dc2ae19b7dccb85d57a8
 
 	
 
@@ -424,6 +433,12 @@ async equipos(){
 			
 		});
 		
+<<<<<<< HEAD
+=======
+		}else{
+			alert("Codigo inválido")
+		}
+>>>>>>> d09db81b9b3c83247eb0dc2ae19b7dccb85d57a8
 
 		
 	};
