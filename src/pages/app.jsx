@@ -17,6 +17,7 @@ import Existencias from '../components/Existencias';
 import OrdenesCompra from '../components/PurchaseOrders';
 import OrdenCompra from '../components/PurchaseDetail';
 import Transfer from '../components/Transfer';
+import Pesarcerdo from '../components/Pesarcerdo';
 import Alimentar from '../components/Alimentar';
 import CerdosNuevos from '../components/CerdosNuevos';
 import Login from '../components/Login';
@@ -529,6 +530,7 @@ export default class App extends Component {
 			<RutaPrivada  path="/app/ordenp/:action/:id" component={OrdenP} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/existencias" component={Existencias} guardar={this.guardar} {...propson}  ></RutaPrivada>
 			<RutaPrivada  path="/app/cerdosnuevos" component={CerdosNuevos} guardar={this.guardar} {...propson}  ></RutaPrivada>
+			<RutaPrivada  path="/app/pesarcerdos" component={Pesarcerdo} guardar={this.guardar} {...propstrans}  ></RutaPrivada>
 			
 				<Login path='/app/login/:error' />
 				
